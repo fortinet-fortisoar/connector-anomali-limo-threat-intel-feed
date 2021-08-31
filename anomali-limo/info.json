@@ -1,0 +1,100 @@
+{
+    "name": "anomali-limo",
+    "version": "1.0.0",
+    "label": "Anomali Limo",
+    "description": "Ingest Threat Feeds from the Anomali Limo TAXII Server",
+    "publisher": "",
+    "icon_small_name": "",
+    "icon_large_name": "",
+    "id": 85,
+    "configuration": {
+        "fields": [
+            {
+                "title": "Server URL",
+                "type": "text",
+                "name": "serverURL",
+                "required": true,
+                "visible": true,
+                "editable": true,
+                "value": "https://limo.anomali.com/api/v1/taxii2/taxii/"
+            },
+            {
+                "title": "Username",
+                "type": "text",
+                "name": "username",
+                "required": false,
+                "visible": true,
+                "editable": true,
+                "value": "guest"
+            },
+            {
+                "title": "Password",
+                "type": "text",
+                "name": "password",
+                "required": true,
+                "visible": true,
+                "editable": true,
+                "value": "guest"
+            }
+        ]
+    },
+    "operations": [
+        {
+            "title": "Get Feed",
+            "operation": "get_feed",
+            "description": "Pull all threat intel and create Indicator records into FortiSOAR",
+            "parameters": [
+                {
+                    "title": "Record Creation Playbook IRI",
+                    "type": "text",
+                    "name": "create_pb_id",
+                    "required": false,
+                    "visible": true,
+                    "editable": true
+                }
+            ],
+            "open": false,
+            "category": "investigation"
+        },
+        {
+            "title": "Get Sample Feed",
+            "operation": "get_sample_feed",
+            "description": "Sample feeds for data mapping",
+            "parameters": [],
+            "open": false,
+            "category": "investigation"
+        }
+    ],
+    "category": "",
+    "active": true,
+    "cs_compatible": true,
+    "system": false,
+    "playbook_collections": [],
+    "icon_small": "",
+    "icon_large": "",
+    "help_online": null,
+    "help_file": null,
+    "vendor_version": null,
+    "status": "Completed",
+    "install_result": {
+        "output": "",
+        "message": "Success"
+    },
+    "config_count": 0,
+    "ingestion_supported": false,
+    "cs_approved": false,
+    "tags": [],
+    "remote_status": {
+        "output": "",
+        "status": "finished",
+        "message": "Success"
+    },
+    "rpm_full_name": "",
+    "installed": true,
+    "created": "2021-08-31T09:27:55.453769Z",
+    "modified": "2021-08-31T09:27:55.453809Z",
+    "requirements_installed": "In-Progress",
+    "agent": "8eaba3eff26fcef7d6b479714fc8699a",
+    "forked_from": false,
+    "rpm_installed": false
+}
