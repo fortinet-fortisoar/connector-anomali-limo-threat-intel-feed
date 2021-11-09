@@ -1,2 +1,1 @@
-# Add Python Dependencies
-taxii2-client
+taxii2-client==2.3.0
