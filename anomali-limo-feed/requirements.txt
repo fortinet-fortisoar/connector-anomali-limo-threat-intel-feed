@@ -1,1 +1,2 @@
 taxii2-client
+stix2
