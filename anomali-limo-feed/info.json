@@ -2,7 +2,7 @@
   "name": "anomali-limo-threat-feed",
   "label": "Anomali Limo Threat Intel Feed",
   "description": "Anomali Limo Threat Intelligence Feed Integration",
-  "publisher": "Community",
+  "publisher": "Fortinet",
   "cs_approved": true,
   "cs_compatible": true,
   "version": "1.0.0",
@@ -145,7 +145,7 @@
                 "visible": true,
                 "editable": true,
                 "required": true,
-                "placeholder": "Eg. demo.json",
+                "placeholder": "Eg. feeds.json",
                 "tooltip": "The file will be created under /tmp"
               }
             ]
@@ -173,8 +173,8 @@
           "editable": true,
           "required": false,
           "placeholder": "1000",
-          "tooltip": "Upper limit of indicators to fetch, if not provided then fetch the full objects in specified collection.",
-          "description": "Upper limit of indicators to fetch, if not provided then fetch the full objects in specified collection."
+          "tooltip": "Maximum number of indicators to fetch. If not specified, all objects in the specified collection are fetched.",
+          "description": "Maximum number of indicators to fetch. If not specified, all objects in the specified collection are fetched."
         }
       ],
       "enabled": true
@@ -233,8 +233,8 @@
           "required": true,
           "editable": true,
           "type": "text",
-          "tooltip": "Specify the Collection ID, who's Object information you want to retrieve.",
-          "description": "Specify the Collection ID, who's Object information you want to retrieve."
+          "tooltip": "Collection ID containing the Object.",
+          "description": "Collection ID containing the Object."
         },
         {
           "title": "Object ID",
@@ -243,8 +243,8 @@
           "required": true,
           "editable": true,
           "type": "text",
-          "tooltip": "ID Of the Object to get.",
-          "description": "ID Of the Object to get."
+          "tooltip": "ID of the object to be fetched.",
+          "description": "ID of the object to be fetched."
         }
       ],
       "enabled": true
