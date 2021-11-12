@@ -1,2 +1,2 @@
-# Add Python Dependencies
 taxii2-client
+stix2

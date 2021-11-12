@@ -1,0 +1,295 @@
+{
+  "name": "anomali-limo-threat-feed",
+  "label": "Anomali Limo Threat Intel Feed",
+  "description": "Anomali Limo Threat Intelligence Feed Integration",
+  "publisher": "Fortinet",
+  "cs_approved": true,
+  "cs_compatible": true,
+  "version": "1.0.0",
+  "category": "Threat Intelligence",
+  "icon_small_name": "small.png",
+  "icon_large_name": "large.png",
+  "help_online": "",
+  "configuration": {
+    "fields": [
+      {
+        "title": "Server URL",
+        "required": true,
+        "editable": true,
+        "visible": true,
+        "type": "text",
+        "name": "server_url",
+        "value": "https://limo.anomali.com"
+      },
+      {
+        "title": "User Name",
+        "required": true,
+        "editable": true,
+        "visible": true,
+        "type": "text",
+        "name": "username",
+        "value": "guest"
+      },
+      {
+        "title": "Password",
+        "required": true,
+        "editable": true,
+        "visible": true,
+        "type": "password",
+        "name": "password",
+        "value": "guest"
+      },
+      {
+        "title": "Verify SSL",
+        "required": false,
+        "editable": true,
+        "visible": true,
+        "type": "checkbox",
+        "name": "verify_ssl",
+        "value": true
+      }
+    ]
+  },
+  "operations": [
+    {
+      "operation": "get_api_root_information",
+      "title": "Get API Root Information",
+      "description": "Returns information contains title, description, TAXII versions and maximum size of the content body for the specified TAXII server.",
+      "category": "investigation",
+      "annotation": "get_api_root_information",
+      "output_schema": {
+        "max_content_length": "",
+        "title": "",
+        "versions": [
+          ""
+        ]
+      },
+      "parameters": [
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "get_collections",
+      "title": "Get Collections",
+      "description": "Returns the list of public/private/shared collection resources to which the user has access.",
+      "category": "investigation",
+      "annotation": "get_collections",
+      "output_schema": {
+        "collections": [
+          {
+            "can_read": "",
+            "can_write": "",
+            "description": "",
+            "id": "",
+            "title": ""
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "title": "collection ID",
+          "name": "collectionID",
+          "visible": true,
+          "required": false,
+          "editable": true,
+          "type": "text",
+          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
+          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+        }
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "get_objects_by_collection_id",
+      "title": "Get Objects By Collection ID",
+      "description": "Retrieve all available objects in a Collection.",
+      "category": "investigation",
+      "annotation": "get_objects_by_collection_id",
+      "api_output_schema": "get_output_schema",
+      "output_schema": {},
+      "parameters": [
+        {
+          "title": "Collection ID",
+          "name": "collectionID",
+          "visible": true,
+          "required": true,
+          "editable": true,
+          "type": "text",
+          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
+          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+        },
+        {
+          "title": "Created After",
+          "name": "added_after",
+          "visible": true,
+          "required": false,
+          "editable": true,
+          "type": "datetime",
+          "tooltip": "Filter the result set to only include the items added after the specified time.",
+          "description": "Filter the result set to only include the items added after the specified time."
+        },
+        {
+          "title": "Save Response to File",
+          "name": "file_response",
+          "visible": true,
+          "required": false,
+          "editable": true,
+          "type": "checkbox",
+          "value": true,
+          "onchange": {
+            "true": [
+              {
+                "title": "Filename",
+                "name": "filename",
+                "type": "text",
+                "visible": true,
+                "editable": true,
+                "required": true,
+                "placeholder": "Eg. feeds.json",
+                "tooltip": "The file will be created under /tmp"
+              }
+            ]
+          },
+          "tooltip": "If enabled, the feed will be written to a value, else returned as a JSON",
+          "description": "Specify the response field, If check then save the response in File else in JSON"
+        },
+        {
+          "title": "Offset",
+          "name": "offset",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": true,
+          "placeholder": "0",
+          "value": "0",
+          "tooltip": "From which offset you want to fetch indicators",
+          "description": "From which offset you want to fetch indicators"
+        },
+        {
+          "title": "Limit",
+          "name": "limit",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "1000",
+          "tooltip": "Maximum number of indicators to fetch. If not specified, all objects in the specified collection are fetched.",
+          "description": "Maximum number of indicators to fetch. If not specified, all objects in the specified collection are fetched."
+        }
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "get_output_schema",
+      "annotation": "get_output_schema",
+      "description": "Generates output schema for other actions based on the input configuration",
+      "title": "Get Output Schema",
+      "enabled": true,
+      "visible": false,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_objects_by_object_id",
+      "title": "Get Object By Object ID",
+      "description": "Returns general information for the specific object of a collection.",
+      "category": "investigation",
+      "annotation": "get_objects_by_object_id",
+      "output_schema": {
+        "id": "",
+        "objects": [
+          {
+            "created": "",
+            "description": "",
+            "id": "",
+            "labels": [
+            ],
+            "modified": "",
+            "name": "",
+            "object_marking_refs": [
+            ],
+            "pattern": "",
+            "type": "",
+            "valid_from": ""
+          },
+          {
+            "created": "",
+            "definition": {
+              "tlp": ""
+            },
+            "definition_type": "",
+            "id": "",
+            "type": ""
+          }
+        ],
+        "spec_version": "",
+        "type": ""
+      },
+      "parameters": [
+        {
+          "title": "collection ID",
+          "name": "collectionID",
+          "visible": true,
+          "required": true,
+          "editable": true,
+          "type": "text",
+          "tooltip": "Collection ID containing the Object.",
+          "description": "Collection ID containing the Object."
+        },
+        {
+          "title": "Object ID",
+          "name": "objectID",
+          "visible": true,
+          "required": true,
+          "editable": true,
+          "type": "text",
+          "tooltip": "ID of the object to be fetched.",
+          "description": "ID of the object to be fetched."
+        }
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "get_manifest_by_collection_id",
+      "title": "Get Manifest By Collection ID",
+      "description": "Returns manifest information about all available objects.",
+      "category": "investigation",
+      "annotation": "get_manifest_by_collection_id",
+      "output_schema": {
+        "objects": [
+          {
+            "date_added": "",
+            "id": "",
+            "media_types": [
+            ],
+            "versions": [
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "title": "collection ID",
+          "name": "collectionID",
+          "visible": true,
+          "required": true,
+          "editable": true,
+          "type": "text",
+          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
+          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+        },
+        {
+          "title": "Added After",
+          "name": "added_after",
+          "visible": true,
+          "required": false,
+          "editable": true,
+          "type": "datetime",
+          "tooltip": "Filter the result set to only include the items added after the specified time.",
+          "description": "Filter the result set to only include the items added after the specified time."
+        }
+      ],
+      "enabled": true
+    }
+  ]
+}
