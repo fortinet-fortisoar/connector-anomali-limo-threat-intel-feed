@@ -5,6 +5,7 @@ All rights reserved.
 FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE 
 Copyright end 
 """
+
 import base64
 
 import requests
