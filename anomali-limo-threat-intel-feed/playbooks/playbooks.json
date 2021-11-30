@@ -1,0 +1,399 @@
+{
+  "type": "workflow_collections",
+  "data": [
+    {
+      "uuid": "4016b443-a1c9-436b-95ad-a41a6e4f6f48",
+      "@type": "WorkflowCollection",
+      "workflows": [
+        {
+          "@type": "Workflow",
+          "uuid": "855b8b4d-1442-49a9-adae-fb453ccc8d30",
+          "collection": "/api/3/workflow_collections/4016b443-a1c9-436b-95ad-a41a6e4f6f48",
+          "steps": [
+            {
+              "uuid": "6f995bba-7b15-4d58-886d-d68af6af36bb",
+              "@type": "WorkflowStep",
+              "name": "Alerts",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "route": "996f2b4c-c6fd-469e-bc34-fe0957a3c934",
+                "title": "Anomali Limo Threat Intel Feed: Get API Root Information",
+                "resources": [
+                  "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "records": "{{vars.input.records[0]}}"
+                  }
+                },
+                "noRecordExecution": true,
+                "singleRecordExecution": false
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a"
+            },
+            {
+              "uuid": "f39ec809-d37e-4a55-bec2-21ff85cff7e4",
+              "@type": "WorkflowStep",
+              "name": "Get API Root Information",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Anomali Limo Threat Intel Feed",
+                "config": "''",
+                "params": [],
+                "version": "1.0.0",
+                "connector": "anomali-limo-threat-intel-feed",
+                "operation": "get_api_root_information",
+                "operationTitle": "Get API Root Information",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "triggerLimit": null,
+          "description": "Returns information contains title, description, TAXII versions and maximum size of the content body for the specified TAXII server.",
+          "name": "Get API Root Information",
+          "tag": "#Anomali Limo Threat Intel Feed",
+          "isActive": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/6f995bba-7b15-4d58-886d-d68af6af36bb",
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "uuid": "06cca233-6689-475c-8d62-eed14daafd83",
+              "label": null,
+              "isExecuted": false,
+              "name": "Alerts -> Get API Root Information",
+              "sourceStep": "/api/3/workflow_steps/6f995bba-7b15-4d58-886d-d68af6af36bb",
+              "targetStep": "/api/3/workflow_steps/f39ec809-d37e-4a55-bec2-21ff85cff7e4"
+            }
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "uuid": "9323b23a-a785-4b30-9043-5176642e0735",
+          "collection": "/api/3/workflow_collections/4016b443-a1c9-436b-95ad-a41a6e4f6f48",
+          "steps": [
+            {
+              "uuid": "9fe70ba1-f4e3-42e4-b1ca-52c5d829538c",
+              "@type": "WorkflowStep",
+              "name": "Alerts",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "route": "266f77b8-3f19-45f2-b903-fa82ac4d4e00",
+                "title": "Anomali Limo Threat Intel Feed: Get Collections",
+                "resources": [
+                  "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "records": "{{vars.input.records[0]}}"
+                  }
+                },
+                "noRecordExecution": true,
+                "singleRecordExecution": false
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a"
+            },
+            {
+              "uuid": "257be554-a1cb-4692-83c1-a7c163b95aaa",
+              "@type": "WorkflowStep",
+              "name": "Get Collections",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Anomali Limo Threat Intel Feed",
+                "config": "''",
+                "params": {
+                  "collectionID": ""
+                },
+                "version": "1.0.0",
+                "connector": "anomali-limo-threat-intel-feed",
+                "operation": "get_collections",
+                "operationTitle": "Get Collections",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "triggerLimit": null,
+          "description": "Returns the list of public/private/shared collection resources to which the user has access.",
+          "name": "Get Collections",
+          "tag": "#Anomali Limo Threat Intel Feed",
+          "isActive": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/9fe70ba1-f4e3-42e4-b1ca-52c5d829538c",
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "uuid": "ec1d8a1e-2a1d-4657-a269-2bbd3499abec",
+              "label": null,
+              "isExecuted": false,
+              "name": "Alerts -> Get Collections",
+              "sourceStep": "/api/3/workflow_steps/9fe70ba1-f4e3-42e4-b1ca-52c5d829538c",
+              "targetStep": "/api/3/workflow_steps/257be554-a1cb-4692-83c1-a7c163b95aaa"
+            }
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "uuid": "61815047-9935-4a4d-bc49-6ed828ea7483",
+          "collection": "/api/3/workflow_collections/4016b443-a1c9-436b-95ad-a41a6e4f6f48",
+          "steps": [
+            {
+              "uuid": "eb853737-766e-4967-84ee-30b9884e4a63",
+              "@type": "WorkflowStep",
+              "name": "Alerts",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "route": "03bf1aba-5b83-485d-afda-f1d1bc518402",
+                "title": "Anomali Limo Threat Intel Feed: Get Objects By Collection ID",
+                "resources": [
+                  "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "records": "{{vars.input.records[0]}}"
+                  }
+                },
+                "noRecordExecution": true,
+                "singleRecordExecution": false
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a"
+            },
+            {
+              "uuid": "f175b029-3a69-429b-a79d-333e97896755",
+              "@type": "WorkflowStep",
+              "name": "Get Objects By Collection ID",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Anomali Limo Threat Intel Feed",
+                "config": "''",
+                "params": {
+                  "collectionID": "",
+                  "added_after": "",
+                  "file_response": true,
+                  "offset": "0",
+                  "limit": ""
+                },
+                "version": "1.0.0",
+                "connector": "anomali-limo-threat-intel-feed",
+                "operation": "get_objects_by_collection_id",
+                "operationTitle": "Get Objects By Collection ID",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "triggerLimit": null,
+          "description": "Retrieve all available objects in a Collection.",
+          "name": "Get Objects By Collection ID",
+          "tag": "#Anomali Limo Threat Intel Feed",
+          "isActive": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/eb853737-766e-4967-84ee-30b9884e4a63",
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "uuid": "f1343421-2ca8-4646-b434-cdbdbdee9986",
+              "label": null,
+              "isExecuted": false,
+              "name": "Alerts -> Get Objects By Collection ID",
+              "sourceStep": "/api/3/workflow_steps/eb853737-766e-4967-84ee-30b9884e4a63",
+              "targetStep": "/api/3/workflow_steps/f175b029-3a69-429b-a79d-333e97896755"
+            }
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "uuid": "55e2c275-16fd-4880-8782-db5d4fdd00d9",
+          "collection": "/api/3/workflow_collections/4016b443-a1c9-436b-95ad-a41a6e4f6f48",
+          "steps": [
+            {
+              "uuid": "bd576a22-ed54-4316-82b7-f319619cfbb9",
+              "@type": "WorkflowStep",
+              "name": "Alerts",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "route": "f930725c-5e77-411a-b0f9-ca54ab0f8beb",
+                "title": "Anomali Limo Threat Intel Feed: Get Object By Object ID",
+                "resources": [
+                  "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "records": "{{vars.input.records[0]}}"
+                  }
+                },
+                "noRecordExecution": true,
+                "singleRecordExecution": false
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a"
+            },
+            {
+              "uuid": "07ed526b-f204-4bb3-b575-b2bef1ce7271",
+              "@type": "WorkflowStep",
+              "name": "Get Object By Object ID",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Anomali Limo Threat Intel Feed",
+                "config": "''",
+                "params": {
+                  "collectionID": "",
+                  "objectID": ""
+                },
+                "version": "1.0.0",
+                "connector": "anomali-limo-threat-intel-feed",
+                "operation": "get_objects_by_object_id",
+                "operationTitle": "Get Object By Object ID",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "triggerLimit": null,
+          "description": "Returns general information for the specific object of a collection.",
+          "name": "Get Object By Object ID",
+          "tag": "#Anomali Limo Threat Intel Feed",
+          "isActive": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/bd576a22-ed54-4316-82b7-f319619cfbb9",
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "uuid": "ddbbcecc-8ada-42c8-9fac-e7223411d7a7",
+              "label": null,
+              "isExecuted": false,
+              "name": "Alerts -> Get Object By Object ID",
+              "sourceStep": "/api/3/workflow_steps/bd576a22-ed54-4316-82b7-f319619cfbb9",
+              "targetStep": "/api/3/workflow_steps/07ed526b-f204-4bb3-b575-b2bef1ce7271"
+            }
+          ]
+        },
+        {
+          "@type": "Workflow",
+          "uuid": "752d70c1-9e1c-46f3-92a5-d046ad9489cb",
+          "collection": "/api/3/workflow_collections/4016b443-a1c9-436b-95ad-a41a6e4f6f48",
+          "steps": [
+            {
+              "uuid": "3fe9ab37-f517-4658-b2de-c8ee085b0a92",
+              "@type": "WorkflowStep",
+              "name": "Alerts",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "route": "04659273-e67c-44cf-abd3-82e6c4bda9c2",
+                "title": "Anomali Limo Threat Intel Feed: Get Manifest By Collection ID",
+                "resources": [
+                  "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "records": "{{vars.input.records[0]}}"
+                  }
+                },
+                "noRecordExecution": true,
+                "singleRecordExecution": false
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a"
+            },
+            {
+              "uuid": "27ea2acd-2997-4a56-b362-e4d15fca6173",
+              "@type": "WorkflowStep",
+              "name": "Get Manifest By Collection ID",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Anomali Limo Threat Intel Feed",
+                "config": "''",
+                "params": {
+                  "collectionID": "",
+                  "added_after": ""
+                },
+                "version": "1.0.0",
+                "connector": "anomali-limo-threat-intel-feed",
+                "operation": "get_manifest_by_collection_id",
+                "operationTitle": "Get Manifest By Collection ID",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "triggerLimit": null,
+          "description": "Returns manifest information about all available objects.",
+          "name": "Get Manifest By Collection ID",
+          "tag": "#Anomali Limo Threat Intel Feed",
+          "isActive": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/3fe9ab37-f517-4658-b2de-c8ee085b0a92",
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "uuid": "147149e7-7406-4e5e-8941-e3e33331b570",
+              "label": null,
+              "isExecuted": false,
+              "name": "Alerts -> Get Manifest By Collection ID",
+              "sourceStep": "/api/3/workflow_steps/3fe9ab37-f517-4658-b2de-c8ee085b0a92",
+              "targetStep": "/api/3/workflow_steps/27ea2acd-2997-4a56-b362-e4d15fca6173"
+            }
+          ]
+        }
+      ],
+      "name": "Sample - Anomali Limo Threat Intel Feed - 1.0.0",
+      "description": "Anomali Limo Threat Intelligence Feed Integration",
+      "visible": true,
+      "image": null
+    }
+  ]
+}

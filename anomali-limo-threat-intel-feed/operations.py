@@ -10,11 +10,10 @@ import base64
 import requests
 from connectors.cyops_utilities.builtins import create_file_from_string
 from taxii2client.v20 import Collection, as_pages
-from taxii2client.v21 import Collection, as_pages
 
 from connectors.core.connector import get_logger, ConnectorError
 
-logger = get_logger('anomali-limo-threat-feed')
+logger = get_logger('anomali-limo-threat-intel-feed')
 
 
 class TaxiiClient(object):

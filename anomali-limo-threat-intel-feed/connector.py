@@ -9,7 +9,7 @@ from connectors.core.connector import Connector, get_logger, ConnectorError
 
 from .operations import operations, _check_health
 
-logger = get_logger('anomali-limo-threat-feed')
+logger = get_logger('anomali-limo-threat-intel-feed')
 
 
 class AnomaliLimoFeed(Connector):
