@@ -129,15 +129,19 @@
           "description": "Filter the result set to only include the items added after the specified time."
         },
         {
-          "title": "Save Response to File",
-          "name": "file_response",
+          "title": "Process response as",
+          "name": "output_mode",
           "visible": true,
           "required": false,
           "editable": true,
-          "type": "checkbox",
-          "value": true,
+          "type": "select",
+          "options": ["Save to File", "Return as a JSON"],
+          "value": "Save to File",
+          "tooltip": "The Feed Data can either be returned as a JSON or written to a file on the FortiSOAR server",
+          "description": "The Feed Data can either be returned as a JSON or written to a file on the FortiSOAR server",
           "onchange": {
-            "true": [
+            "Return as a JSON": [],
+            "Save to File": [
               {
                 "title": "Filename",
                 "name": "filename",
@@ -149,9 +153,7 @@
                 "tooltip": "The file will be created under /tmp"
               }
             ]
-          },
-          "tooltip": "If enabled, the feed will be written to a value, else returned as a JSON",
-          "description": "Specify the response field, If check then save the response in File else in JSON"
+          }
         },
         {
           "title": "Offset",
