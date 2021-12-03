@@ -5,6 +5,7 @@ All rights reserved.
 FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE 
 Copyright end 
 """
+
 import base64
 
 import requests
@@ -15,7 +16,9 @@ from .utils import create_batch_records
 
 from connectors.core.connector import get_logger, ConnectorError
 
-logger = get_logger('anomali-limo-threat-feed')
+logger = get_logger('anomali-limo-threat-intel-feed')
+
+
 BATCH_SIZE = 2000
 
 
