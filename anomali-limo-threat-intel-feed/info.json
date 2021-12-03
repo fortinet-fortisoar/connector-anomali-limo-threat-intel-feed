@@ -1,5 +1,5 @@
 {
-  "name": "anomali-limo-threat-feed",
+  "name": "anomali-limo-threat-intel-feed",
   "label": "Anomali Limo Threat Intel Feed",
   "description": "Anomali Limo Threat Intelligence Feed Integration",
   "publisher": "Fortinet",
