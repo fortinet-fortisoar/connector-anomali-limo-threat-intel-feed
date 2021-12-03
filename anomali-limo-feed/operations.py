@@ -141,6 +141,8 @@ def get_objects_by_collection_id(config, params, **kwargs):
                                per_request=1000):
             if bundle.get("objects"):
                 response.extend(bundle["objects"])
+            else:
+                break
     else :
         params = {k: v for k, v in params.items() if v is not None and v != ''}
         wanted_keys = set(['added_after'])
