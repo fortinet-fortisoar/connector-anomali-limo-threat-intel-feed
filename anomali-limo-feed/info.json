@@ -1,5 +1,5 @@
 {
-  "name": "anomali-limo-threat-feed",
+  "name": "anomali-limo-feed",
   "label": "Anomali Limo Threat Intel Feed",
   "description": "Anomali Limo Threat Intelligence Feed Integration",
   "publisher": "Fortinet",
@@ -129,15 +129,30 @@
           "description": "Filter the result set to only include the items added after the specified time."
         },
         {
-          "title": "Save Response to File",
-          "name": "file_response",
+          "title": "Process response as",
+          "name": "output_mode",
           "visible": true,
           "required": false,
           "editable": true,
-          "type": "checkbox",
-          "value": true,
+          "type": "select",
+          "options": ["Create as Feed Records in FortiSOAR", "Save to File", "Return as a JSON"],
+          "value": "Save to File",
+          "tooltip": "The Feed Data can either be returned as a JSON; written to a file on the FortiSOAR server; or Created as Feed Records in FortiSOAR",
+          "description": "The Feed Data can either be returned as a JSON; written to a file on the FortiSOAR server; or Created as Feed Records in FortiSOAR",
           "onchange": {
-            "true": [
+            "Create as Feed Records in FortiSOAR": [
+              {
+                "title": "Record Creation Playbook IRI",
+                "description": "",
+                "type": "text",
+                "name": "create_pb_id",
+                "required": false,
+                "editable": true,
+                "visible": true
+              }
+            ],
+            "Return as a JSON": [],
+            "Save to File": [
               {
                 "title": "Filename",
                 "name": "filename",
@@ -149,9 +164,7 @@
                 "tooltip": "The file will be created under /tmp"
               }
             ]
-          },
-          "tooltip": "If enabled, the feed will be written to a value, else returned as a JSON",
-          "description": "Specify the response field, If check then save the response in File else in JSON"
+          }
         },
         {
           "title": "Offset",

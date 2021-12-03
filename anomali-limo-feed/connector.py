@@ -17,7 +17,7 @@ class AnomaliLimoFeed(Connector):
         try:
             logger.info('In execute() Operation: {}'.format(operation))
             operation = operations.get(operation)
-            return operation(config, params)
+            return operation(config, params, **kwargs)
         except Exception as err:
             logger.error('An exception occurred {}'.format(err))
             raise ConnectorError('{}'.format(err))
