@@ -29,7 +29,7 @@
           "remoteExecutableFlag": false,
           "parameters": [],
           "synchronous": false,
-          "lastModifyDate": 1638534753,
+          "lastModifyDate": 1638531689,
           "collection": "/api/3/workflow_collections/bd186ecd-ad4a-4910-a1ff-6e4d762d3ae6",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/99b0d430-0dfe-426e-af5a-f726d0d25120",
@@ -150,28 +150,39 @@
             },
             {
               "@type": "WorkflowStep",
-              "name": "Ingest records for each collection",
+              "name": "Fetch and Create",
               "description": null,
               "arguments": {
+                "name": "Anomali Limo Threat Intel Feed",
+                "config": "6d970bd1-c888-467d-8748-80a814fafbdf",
+                "params": {
+                  "limit": "",
+                  "offset": "0",
+                  "added_after": "{{vars.lastPullTime}}",
+                  "output_mode": "Create as Feed Records in FortiSOAR",
+                  "collectionID": "{{ vars.item.id }}",
+                  "create_pb_id": "cc47ea13-5f9b-409e-9a50-3c80bd008140",
+                  "file_response": false
+                },
+                "version": "1.0.0",
                 "for_each": {
-                  "item": "{{ vars.steps.Get_All_Collections.data.collections }}",
-                  "parallel": false,
+                  "item": "{{vars.steps.Get_All_Collections.data.collections}}",
+                  "__bulk": false,
+                  "parallel": true,
                   "condition": ""
                 },
-                "arguments": {
-                  "collectionID": "{{vars.item.id}}",
-                  "lastPullTime": "{{vars.lastPullTime}}"
-                },
-                "apply_async": true,
-                "step_variables": [],
-                "workflowReference": "/api/3/workflows/cc47ea13-5f9b-409e-9a50-3c80bd008140"
+                "connector": "anomali-limo-feed",
+                "operation": "get_objects_by_collection_id",
+                "operationTitle": "Get Objects By Collection ID",
+                "pickFromTenant": false,
+                "step_variables": []
               },
               "status": null,
               "top": "705",
               "left": "125",
-              "stepType": "/api/3/workflow_step_types/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
-              "uuid": "5f260556-05f9-4ccb-be99-f3429f4f2b59",
-              "id": 5034
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "uuid": "647305cc-6a01-42cd-b9b3-f2dc287e7205",
+              "id": 4971
             }
           ],
           "routes": [
@@ -213,21 +224,21 @@
             },
             {
               "@type": "WorkflowRoute",
-              "name": "Get All Collections -> Ingest records for each collection",
-              "targetStep": "/api/3/workflow_steps/5f260556-05f9-4ccb-be99-f3429f4f2b59",
-              "sourceStep": "/api/3/workflow_steps/0de3f730-3333-48a6-b1ac-d7cf2967c5fc",
+              "name": "Fetch and Create -> Update Pull Time",
+              "targetStep": "/api/3/workflow_steps/4e0f6122-d74f-44f4-bbc9-2768ba1fe041",
+              "sourceStep": "/api/3/workflow_steps/647305cc-6a01-42cd-b9b3-f2dc287e7205",
               "label": null,
               "isExecuted": false,
-              "uuid": "9fe935f9-a2fe-4e82-acdc-dd0d2781bb1c"
+              "uuid": "e2d9cc4d-b0c0-40cd-8f3a-12e7ab12c87f"
             },
             {
               "@type": "WorkflowRoute",
-              "name": "Ingest records for each collection -> Update Pull Time",
-              "targetStep": "/api/3/workflow_steps/4e0f6122-d74f-44f4-bbc9-2768ba1fe041",
-              "sourceStep": "/api/3/workflow_steps/5f260556-05f9-4ccb-be99-f3429f4f2b59",
+              "name": "Get All Collections -> Fetch and Create",
+              "targetStep": "/api/3/workflow_steps/647305cc-6a01-42cd-b9b3-f2dc287e7205",
+              "sourceStep": "/api/3/workflow_steps/0de3f730-3333-48a6-b1ac-d7cf2967c5fc",
               "label": null,
               "isExecuted": false,
-              "uuid": "d07c963e-55b3-4187-b70f-8922914b7a6c"
+              "uuid": "3f788245-9187-4a65-8be2-f205d0ce7508"
             }
           ],
           "priority": "/api/3/picklists/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
@@ -241,7 +252,7 @@
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
           "createDate": 1638342537.973716,
           "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1638534753.123577,
+          "modifyDate": 1638531689.389585,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -727,11 +738,10 @@
           "singleRecordExecution": false,
           "remoteExecutableFlag": false,
           "parameters": [
-            "collectionID",
-            "lastPullTime"
+            "ingestedData"
           ],
           "synchronous": false,
-          "lastModifyDate": 1638534702,
+          "lastModifyDate": 1638531722,
           "collection": "/api/3/workflow_collections/bd186ecd-ad4a-4910-a1ff-6e4d762d3ae6",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/786477fc-5ca6-4092-bea1-f1d1db6720ae",
@@ -790,8 +800,8 @@
                   {
                     "option": "No, For Ingestion",
                     "default": true,
-                    "step_iri": "/api/3/workflow_steps/a6b92f0d-e04a-4826-bec4-0d147add1f8f",
-                    "step_name": "Get Objects For Collection"
+                    "step_iri": "/api/3/workflow_steps/3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
+                    "step_name": "Create Record"
                   }
                 ]
               },
@@ -808,11 +818,11 @@
               "description": null,
               "arguments": {
                 "for_each": {
-                  "item": "{{vars.steps.Get_Objects_For_Collection.data}}",
+                  "item": "{{vars.input.params.ingestedData}}",
                   "__bulk": true,
                   "parallel": false,
                   "condition": "",
-                  "batch_size": 1000
+                  "batch_size": 8000
                 },
                 "resource": {
                   "tLP": "{% if vars.tlp %}{{ vars.tlp | resolveRange(vars.tlp_map)}}{% endif %}",
@@ -835,8 +845,8 @@
                 "step_variables": []
               },
               "status": null,
-              "top": "400",
-              "left": "1060",
+              "top": "460",
+              "left": "740",
               "stepType": "/api/3/workflow_step_types/7b221880-716b-4726-a2ca-5e568d330b3e",
               "uuid": "3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
               "id": 4983
@@ -854,34 +864,6 @@
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "uuid": "28271ed7-7878-46d2-9129-89cc65a69d2c",
               "id": 4984
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Get Objects For Collection",
-              "description": null,
-              "arguments": {
-                "name": "Anomali Limo Threat Intel Feed",
-                "config": "4158e181-3fb1-4af0-9e49-57de2540ae3c",
-                "params": {
-                  "limit": "",
-                  "offset": "0",
-                  "added_after": "{{vars.input.params.lastPullTime}}",
-                  "output_mode": "Return as a JSON",
-                  "collectionID": "{{vars.input.params.collectionID}}"
-                },
-                "version": "1.0.0",
-                "connector": "anomali-limo-feed",
-                "operation": "get_objects_by_collection_id",
-                "operationTitle": "Get Objects By Collection ID",
-                "pickFromTenant": false,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "400",
-              "left": "740",
-              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
-              "uuid": "a6b92f0d-e04a-4826-bec4-0d147add1f8f",
-              "id": 5033
             }
           ],
           "routes": [
@@ -914,21 +896,12 @@
             },
             {
               "@type": "WorkflowRoute",
-              "name": "Is data only for mapping -> Get Objects For Collection",
-              "targetStep": "/api/3/workflow_steps/a6b92f0d-e04a-4826-bec4-0d147add1f8f",
+              "name": "Is data only for mapping -> Create Record",
+              "targetStep": "/api/3/workflow_steps/3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
               "sourceStep": "/api/3/workflow_steps/94eb6a52-72ac-468b-839d-6738923263fa",
               "label": "No, For Ingestion",
               "isExecuted": false,
-              "uuid": "d5de6ff1-e3a8-45d5-bbd7-fbba20c192ff"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Get Objects For Collection -> Create Record",
-              "targetStep": "/api/3/workflow_steps/3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
-              "sourceStep": "/api/3/workflow_steps/a6b92f0d-e04a-4826-bec4-0d147add1f8f",
-              "label": null,
-              "isExecuted": false,
-              "uuid": "51fd5b89-245c-4f2f-aaee-4cd3396e91e1"
+              "uuid": "5abff9d1-8a23-4120-9e40-e9be5fe7ec31"
             }
           ],
           "priority": "/api/3/picklists/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
@@ -943,7 +916,7 @@
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
           "createDate": 1638342537.982815,
           "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1638534702.043804,
+          "modifyDate": 1638531722.298515,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null

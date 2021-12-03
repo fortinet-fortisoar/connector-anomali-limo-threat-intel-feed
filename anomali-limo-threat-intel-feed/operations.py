@@ -12,6 +12,7 @@ import requests
 from datetime import datetime
 from connectors.cyops_utilities.builtins import create_file_from_string
 from taxii2client.v20 import Collection, as_pages
+from .utils import create_batch_records
 
 from connectors.core.connector import get_logger, ConnectorError
 
@@ -164,6 +165,13 @@ def get_objects_by_collection_id(config, params, **kwargs):
     mode = params.get('output_mode')
     if mode == 'Save to File':
         return create_file_from_string(contents=deduped_indicators, filename=params.get('filename'))
+    elif mode == 'Create as Feed Records in FortiSOAR':
+        create_pb_id = params.get("create_pb_id")
+        parent_wf = kwargs.get('env', {}).get('wf_id')
+        parent_step = kwargs.get('env', {}).get('step_id')
+        for start_index in range(0, len(deduped_indicators), BATCH_SIZE):
+            create_batch_records(deduped_indicators[start_index: start_index + BATCH_SIZE], create_pb_id, parent_wf, parent_step)
+        return {"message": "Succesfully triggered playbooks for creating feed records"}
     else:
         return deduped_indicators
 
