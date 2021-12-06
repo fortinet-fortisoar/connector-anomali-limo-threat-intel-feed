@@ -731,7 +731,7 @@
             "lastPullTime"
           ],
           "synchronous": false,
-          "lastModifyDate": 1638534702,
+          "lastModifyDate": 1638776096,
           "collection": "/api/3/workflow_collections/bd186ecd-ad4a-4910-a1ff-6e4d762d3ae6",
           "versions": [],
           "triggerStep": "/api/3/workflow_steps/786477fc-5ca6-4092-bea1-f1d1db6720ae",
@@ -804,45 +804,6 @@
             },
             {
               "@type": "WorkflowStep",
-              "name": "Create Record",
-              "description": null,
-              "arguments": {
-                "for_each": {
-                  "item": "{{vars.steps.Get_Objects_For_Collection.data}}",
-                  "__bulk": true,
-                  "parallel": false,
-                  "condition": "",
-                  "batch_size": 1000
-                },
-                "resource": {
-                  "tLP": "{% if vars.tlp %}{{ vars.tlp | resolveRange(vars.tlp_map)}}{% endif %}",
-                  "type": "{% if 'pattern' in vars.item %}{{ vars.item.pattern.split(\":\")[0][1:] | resolveRange(vars.threat_intelligence_typeofindicator_map)}}{% endif %}",
-                  "value": "{%if ':value' in vars.item.pattern %}{{ vars.item.pattern.split(\":value = \")[-1].split(\"]\")[0].strip()[1:-1] }}{% elif 'network-traffic' in vars.item.pattern %}{{ vars.item.pattern.split(\"network-traffic:src_ref.value =\")[-1].split(\"]\")[0].strip()[1:-1] + \":\" + vars.item.pattern.split(\"network-traffic:src_port =\")[1].split(\"AND\")[0].strip()}}{% else %}Malicious Feed{% endif %}",
-                  "source": "Anomali Limo Feed",
-                  "created": "{% if vars.item.created %}{{arrow.get(vars.item.created).int_timestamp}}{% endif %}",
-                  "modified": "{% if vars.item.modified %}{{arrow.get(vars.item.modified).int_timestamp}}{% else %}None{% endif %}",
-                  "__replace": "true",
-                  "expiresOn": "{% if vars.expiry %}{{ arrow.get(vars.item.valid_from).int_timestamp + (vars.expiry | int)*24*60*60 }}{% else %}None{% endif %}",
-                  "validFrom": "{% if vars.item.valid_from %}{{arrow.get(vars.item.valid_from).int_timestamp}}{% endif %}",
-                  "confidence": "{% if vars.confidence %}{{ vars.confidence }}{% else %}{{ vars.item.labels[2].split(\"-\")[-1] }}{% endif %}",
-                  "reputation": "{% if vars.reputation %}{{ vars.reputation | resolveRange(vars.reputation_map)}}{% else %}{{ vars.item.labels[1].split(\"-\")[-1] | resolveRange(vars.reputation_map) }}{% endif %}",
-                  "sourceData": "{{ vars.item }}",
-                  "description": "<p>{{ vars.item.description }}</p>"
-                },
-                "_showJson": false,
-                "collection": "/api/ingest-feeds/threat_intel_feeds",
-                "__recommend": [],
-                "step_variables": []
-              },
-              "status": null,
-              "top": "400",
-              "left": "1060",
-              "stepType": "/api/3/workflow_step_types/7b221880-716b-4726-a2ca-5e568d330b3e",
-              "uuid": "3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
-              "id": 4983
-            },
-            {
-              "@type": "WorkflowStep",
               "name": "Return Sample Data",
               "description": null,
               "arguments": {
@@ -882,6 +843,42 @@
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "uuid": "a6b92f0d-e04a-4826-bec4-0d147add1f8f",
               "id": 5033
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Create Record",
+              "description": null,
+              "arguments": {
+                "for_each": {
+                  "item": "{{vars.steps.Get_Objects_For_Collection.data}}",
+                  "__bulk": true,
+                  "parallel": false,
+                  "condition": "",
+                  "batch_size": 1000
+                },
+                "resource": {
+                  "tlp": "/api/3/picklists/7bff95b7-6438-4b01-b23a-0fe8cb5b33d3",
+                  "value": "{%if ':value' in vars.item.pattern %}{{ vars.item.pattern.split(\":value = \")[-1].split(\"]\")[0].strip()[1:-1] }}{% elif 'network-traffic' in vars.item.pattern %}{{ vars.item.pattern.split(\"network-traffic:src_ref.value =\")[-1].split(\"]\")[0].strip()[1:-1] + \":\" + vars.item.pattern.split(\"network-traffic:src_port =\")[1].split(\"AND\")[0].strip()}}{% else %}Malicious Feed{% endif %}",
+                  "__replace": "true",
+                  "reputation": "{% if vars.reputation %}{{ vars.reputation | resolveRange(vars.reputation_map)}}{% else %}{{ vars.item.labels[1].split(\"-\")[-1] | resolveRange(vars.reputation_map) }}{% endif %}",
+                  "description": "<p>{{ vars.item.description }}</p>",
+                  "indicatorStatus": "/api/3/picklists/2f5cff61-fbff-4bb3-96be-302b78a9fb47"
+                },
+                "_showJson": true,
+                "operation": "Overwrite",
+                "collection": "/api/3/upsert/indicators",
+                "__recommend": [],
+                "fieldOperation": {
+                  "recordTags": "Overwrite"
+                },
+                "step_variables": []
+              },
+              "status": null,
+              "top": "400",
+              "left": "1040",
+              "stepType": "/api/3/workflow_step_types/2597053c-e718-44b4-8394-4d40fe26d357",
+              "uuid": "3609df28-b511-411a-8712-b071e9e3f69f",
+              "id": 5035
             }
           ],
           "routes": [
@@ -924,11 +921,11 @@
             {
               "@type": "WorkflowRoute",
               "name": "Get Objects For Collection -> Create Record",
-              "targetStep": "/api/3/workflow_steps/3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
+              "targetStep": "/api/3/workflow_steps/3609df28-b511-411a-8712-b071e9e3f69f",
               "sourceStep": "/api/3/workflow_steps/a6b92f0d-e04a-4826-bec4-0d147add1f8f",
               "label": null,
               "isExecuted": false,
-              "uuid": "51fd5b89-245c-4f2f-aaee-4cd3396e91e1"
+              "uuid": "c807e5f2-760e-4742-8c1d-3876a0b92ae4"
             }
           ],
           "priority": "/api/3/picklists/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
@@ -943,7 +940,7 @@
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
           "createDate": 1638342537.982815,
           "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1638534702.043804,
+          "modifyDate": 1638776096.093503,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
