@@ -4,7 +4,7 @@ Copyright (C) 2008 - 2021 Fortinet Inc.
 All rights reserved. 
 FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE 
 Copyright end 
-""" 
+"""
 from connectors.core.connector import Connector, get_logger, ConnectorError
 
 from .operations import operations, _check_health
@@ -17,7 +17,7 @@ class AnomaliLimoFeed(Connector):
         try:
             logger.info('In execute() Operation: {}'.format(operation))
             operation = operations.get(operation)
-            return operation(config, params)
+            return operation(config, params, **kwargs)
         except Exception as err:
             logger.error('An exception occurred {}'.format(err))
             raise ConnectorError('{}'.format(err))
