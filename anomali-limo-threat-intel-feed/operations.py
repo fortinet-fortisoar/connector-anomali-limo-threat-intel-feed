@@ -109,7 +109,7 @@ def get_collections(config, params, **kwargs):
     taxii = TaxiiClient(config)
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     if params:
-        response = taxii.make_request_taxii(endpoint='collections/' + params['collectionID'] + '/')
+        response = taxii.make_request_taxii(endpoint='collections/' + str(params['collectionID']) + '/')
     else:
         response = taxii.make_request_taxii(endpoint='collections/')
     if response.get('collections'):
@@ -172,7 +172,7 @@ def get_objects_by_object_id(config, params, **kwargs):
     taxii = TaxiiClient(config)
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     return taxii.make_request_taxii(
-        endpoint='collections/' + params['collectionID'] + '/objects/' + params['objectID'] + '/')
+        endpoint='collections/' + str(params['collectionID']) + '/objects/' + params['objectID'] + '/')
 
 
 def get_manifest_by_collection_id(config, params, **kwargs):
@@ -180,7 +180,7 @@ def get_manifest_by_collection_id(config, params, **kwargs):
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     wanted_keys = set(['added_after'])
     query_params = {k: params[k] for k in params.keys() & wanted_keys}
-    return taxii.make_request_taxii(endpoint='collections/' + params['collectionID'] + '/manifest/',
+    return taxii.make_request_taxii(endpoint='collections/' + str(params['collectionID']) + '/manifest/',
                                     params=query_params)
 
 
