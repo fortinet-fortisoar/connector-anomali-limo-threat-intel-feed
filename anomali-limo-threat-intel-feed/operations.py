@@ -10,16 +10,12 @@ import base64
 from datetime import datetime
 
 import requests
-from datetime import datetime
 from connectors.cyops_utilities.builtins import create_file_from_string
 from taxii2client.v20 import Collection, as_pages
 
 from connectors.core.connector import get_logger, ConnectorError
 
 logger = get_logger('anomali-limo-threat-intel-feed')
-
-BATCH_SIZE = 2000
-
 
 BATCH_SIZE = 2000
 
