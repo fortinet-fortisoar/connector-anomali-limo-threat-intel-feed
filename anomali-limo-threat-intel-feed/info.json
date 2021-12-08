@@ -129,7 +129,7 @@
           "description": "Filter the result set to only include the items added after the specified time."
         },
         {
-          "title": "Process response as",
+          "title": "Process Response As",
           "name": "output_mode",
           "visible": true,
           "required": false,
