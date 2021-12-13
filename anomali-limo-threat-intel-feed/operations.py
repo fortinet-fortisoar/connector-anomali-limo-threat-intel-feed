@@ -144,7 +144,7 @@ def get_objects_by_collection_id(config, params, **kwargs):
                 response.extend(bundle["objects"])
             else:
                 break
-    else:
+    else :
         params = {k: v for k, v in params.items() if v is not None and v != ''}
         wanted_keys = set(['added_after'])
         query_params = {k: params[k] for k in params.keys() & wanted_keys}
