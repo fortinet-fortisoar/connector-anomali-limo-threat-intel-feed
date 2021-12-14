@@ -9,6 +9,10 @@
   "category": "Threat Intelligence",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
+   "ingestion_supported": true,
+  "ingestion_modes": [
+    "scheduled"
+  ],
   "help_online": "",
   "configuration": {
     "fields": [
@@ -87,7 +91,7 @@
       },
       "parameters": [
         {
-          "title": "collection ID",
+          "title": "Collection ID",
           "name": "collectionID",
           "visible": true,
           "required": false,
@@ -129,13 +133,16 @@
           "description": "Filter the result set to only include the items added after the specified time."
         },
         {
-          "title": "Process response as",
+          "title": "Process Response As",
           "name": "output_mode",
           "visible": true,
           "required": false,
           "editable": true,
           "type": "select",
-          "options": ["Save to File", "Return as a JSON"],
+          "options": [
+            "Save to File",
+            "Return as a JSON"
+          ],
           "value": "Save to File",
           "tooltip": "The Feed Data can either be returned as a JSON or written to a file on the FortiSOAR server",
           "description": "The Feed Data can either be returned as a JSON or written to a file on the FortiSOAR server",
@@ -229,7 +236,7 @@
       },
       "parameters": [
         {
-          "title": "collection ID",
+          "title": "Collection ID",
           "name": "collectionID",
           "visible": true,
           "required": true,
@@ -271,7 +278,7 @@
       },
       "parameters": [
         {
-          "title": "collection ID",
+          "title": "Collection ID",
           "name": "collectionID",
           "visible": true,
           "required": true,

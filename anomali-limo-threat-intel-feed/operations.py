@@ -7,16 +7,15 @@ Copyright end
 """
 
 import base64
+from datetime import datetime
 
 import requests
-from datetime import datetime
 from connectors.cyops_utilities.builtins import create_file_from_string
 from taxii2client.v20 import Collection, as_pages
 
 from connectors.core.connector import get_logger, ConnectorError
 
 logger = get_logger('anomali-limo-threat-intel-feed')
-
 
 BATCH_SIZE = 2000
 
@@ -110,7 +109,7 @@ def get_collections(config, params, **kwargs):
     taxii = TaxiiClient(config)
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     if params:
-        response = taxii.make_request_taxii(endpoint='collections/' + params['collectionID'] + '/')
+        response = taxii.make_request_taxii(endpoint='collections/' + str(params['collectionID']) + '/')
     else:
         response = taxii.make_request_taxii(endpoint='collections/')
     if response.get('collections'):
@@ -157,10 +156,11 @@ def get_objects_by_collection_id(config, params, **kwargs):
         # dedup
         filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
         seen = set()
-        deduped_indicators = [x for x in filtered_indicators if [(x["type"], x["pattern"]) not in seen, seen.add((x["type"], x["pattern"]))][0]]
+        deduped_indicators = [x for x in filtered_indicators if
+                              [(x["type"], x["pattern"]) not in seen, seen.add((x["type"], x["pattern"]))][0]]
     except Exception as e:
-            logger.exception("Import Failed")
-            raise ConnectorError('Ingestion Failed with error: ' + str(e))  
+        logger.exception("Import Failed")
+        raise ConnectorError('Ingestion Failed with error: ' + str(e))
     mode = params.get('output_mode')
     if mode == 'Save to File':
         return create_file_from_string(contents=deduped_indicators, filename=params.get('filename'))
@@ -172,7 +172,7 @@ def get_objects_by_object_id(config, params, **kwargs):
     taxii = TaxiiClient(config)
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     return taxii.make_request_taxii(
-        endpoint='collections/' + params['collectionID'] + '/objects/' + params['objectID'] + '/')
+        endpoint='collections/' + str(params['collectionID']) + '/objects/' + params['objectID'] + '/')
 
 
 def get_manifest_by_collection_id(config, params, **kwargs):
@@ -180,7 +180,7 @@ def get_manifest_by_collection_id(config, params, **kwargs):
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     wanted_keys = set(['added_after'])
     query_params = {k: params[k] for k in params.keys() & wanted_keys}
-    return taxii.make_request_taxii(endpoint='collections/' + params['collectionID'] + '/manifest/',
+    return taxii.make_request_taxii(endpoint='collections/' + str(params['collectionID']) + '/manifest/',
                                     params=query_params)
 
 
