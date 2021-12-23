@@ -158,7 +158,7 @@ def get_objects_by_collection_id(config, params, **kwargs):
         # dedup
         filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
         seen = set()
-        deduped_indicators = [x for x in filtered_indicators if [(x["type"], x["pattern"]) not in seen, seen.add((x["type"], x["pattern"]))][0]]
+        deduped_indicators = [x for x in filtered_indicators if [x["pattern"] not in seen, seen.add(x["pattern"])][0]]
     except Exception as e:
             logger.exception("Import Failed")
             raise ConnectorError('Ingestion Failed with error: ' + str(e))  
