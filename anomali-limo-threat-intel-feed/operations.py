@@ -17,8 +17,6 @@ from connectors.core.connector import get_logger, ConnectorError
 
 logger = get_logger('anomali-limo-threat-intel-feed')
 
-BATCH_SIZE = 2000
-
 
 class TaxiiClient(object):
     def __init__(self, config):
@@ -144,7 +142,7 @@ def get_objects_by_collection_id(config, params, **kwargs):
                 response.extend(bundle["objects"])
             else:
                 break
-    else :
+    else:
         params = {k: v for k, v in params.items() if v is not None and v != ''}
         wanted_keys = set(['added_after'])
         query_params = {k: params[k] for k in params.keys() & wanted_keys}
@@ -157,7 +155,7 @@ def get_objects_by_collection_id(config, params, **kwargs):
         filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
         seen = set()
         deduped_indicators = [x for x in filtered_indicators if
-                              [(x["type"], x["pattern"]) not in seen, seen.add((x["type"], x["pattern"]))][0]]
+                              [x["pattern"].replace(" ", "") not in seen, seen.add(x["pattern"].replace(" ", ""))][0]]
     except Exception as e:
         logger.exception("Import Failed")
         raise ConnectorError('Ingestion Failed with error: ' + str(e))
