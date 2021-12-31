@@ -158,20 +158,17 @@ def get_objects_by_collection_id(config, params, **kwargs):
         response = taxii.make_request_taxii(endpoint='collections/' + str(params.get('collectionID')) + '/objects/',
                                             params=query_params, headers=headers)
         response = response.get("objects", [])
-    try:
-        # dedup
-        filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
-        seen = set()
-        deduped_indicators = [x for x in filtered_indicators if [x["pattern"] not in seen, seen.add(x["pattern"])][0]]
-    except Exception as e:
-            logger.exception("Import Failed")
-            raise ConnectorError('Ingestion Failed with error: ' + str(e))  
+
+    filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
     mode = params.get('output_mode')
-    if mode == 'Save to File':
-        return create_file_from_string(contents=deduped_indicators, filename=params.get('filename'))
-    elif mode == 'Create as Feed Records in FortiSOAR':
+    if mode == 'Create as Feed Records in FortiSOAR':
         create_pb_id = params.get("create_pb_id")
         trigger_ingest_playbook(filtered_indicators, create_pb_id, parent_env=kwargs.get('env', {}), batch_size=1000, dedup_field="pattern")
+        return 'Successfully triggered playbooks to create feed records'
+    seen = set()
+    deduped_indicators = [x for x in filtered_indicators if [x["pattern"] not in seen, seen.add(x["pattern"])][0]]
+    if mode == 'Save to File':
+        return create_file_from_string(contents=deduped_indicators, filename=params.get('filename'))
     else:
         return deduped_indicators
 
