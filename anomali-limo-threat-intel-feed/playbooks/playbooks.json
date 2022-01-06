@@ -6,7 +6,7 @@
       "name": "Sample - Anomali Limo Threat Intel Feed - 1.0.0",
       "description": "Sample playbooks for \"Anomali Limo Threat Intel Feed\" connector. If you are planning to use any of the sample playbooks in your environment, ensure that you clone those playbooks and move them to a different collection, since the sample playbook collection gets deleted during connector upgrade and delete.",
       "visible": true,
-      "image": "/api/3/images/471b546a-c6bc-422f-8167-def7bbce9e23",
+      "image": "medium.png",
       "uuid": "bd186ecd-ad4a-4910-a1ff-6e4d762d3ae6",
       "id": 72,
       "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
