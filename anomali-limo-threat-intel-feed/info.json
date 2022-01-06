@@ -1,7 +1,7 @@
 {
   "name": "anomali-limo-threat-intel-feed",
   "label": "Anomali Limo Threat Intel Feed",
-  "description": "Anomali Limo Threat Intelligence Feed Integration",
+  "description": "Anomali Limo is a preconfigured set of intelligence feeds that STAXX users can access immediately upon download, and which offers indicators and insights spanning threat categories you need to secure your business. This connector facilitates automated interactions, such as returning the list of public, private, and shared collection resources to which the user has access, returning general information for a specific object of a specific collection, etc.",
   "publisher": "Fortinet",
   "cs_approved": true,
   "cs_compatible": true,
