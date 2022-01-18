@@ -1,0 +1,271 @@
+{
+  "name": "anomali-limo-feed",
+  "label": "Anomali ThreatStream TAXII Feed",
+  "description": "Anomali ThreatStream TAXII 2.0 Client",
+  "publisher": "Fortinet",
+  "cs_approved": true,
+  "cs_compatible": true,
+  "version": "1.0.0",
+  "category": "SIEM",
+  "icon_small_name": "small_icon.png",
+  "icon_large_name": "large_icon.png",
+  "help_online": "",
+  "configuration": {
+    "fields": [
+      {
+        "title": "Server URL",
+        "required": true,
+        "editable": true,
+        "visible": true,
+        "type": "text",
+        "name": "server_url",
+        "value": "https://limo.anomali.com"
+      },
+      {
+        "title": "User Name",
+        "required": true,
+        "editable": true,
+        "visible": true,
+        "type": "text",
+        "name": "username",
+        "value": "guest"
+      },
+      {
+        "title": "Password",
+        "required": true,
+        "editable": true,
+        "visible": true,
+        "type": "password",
+        "name": "password",
+        "value": "guest"
+      },
+      {
+        "title": "Verify SSL",
+        "required": false,
+        "editable": true,
+        "visible": true,
+        "type": "checkbox",
+        "name": "verify_ssl",
+        "value": true
+      }
+    ]
+  },
+  "operations": [
+    {
+      "operation": "get_api_root_information",
+      "title": "Get API Root Information",
+      "description": "Returns information contains title, description, TAXII versions and maximum size of the content body.",
+      "category": "investigation",
+      "annotation": "get_api_root_information",
+      "output_schema": {
+        "max_content_length": "",
+        "title": "",
+        "versions": [
+          ""
+        ]
+      },
+      "parameters": [
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "get_collections",
+      "title": "Get Collections",
+      "description": "Returns a list of public/private/shared collection resources which users have the access.",
+      "category": "investigation",
+      "annotation": "get_collections",
+      "output_schema": {
+        "collections": [
+          {
+            "can_read": "",
+            "can_write": "",
+            "description": "",
+            "id": "",
+            "title": ""
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "title": "collection ID",
+          "name": "collectionID",
+          "visible": true,
+          "required": false,
+          "editable": true,
+          "type": "text",
+          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
+          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+        }
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "get_objects_by_collection_id",
+      "title": "Get Objects By Collection ID",
+      "description": "Retrieve all available objects in a Collection.",
+      "category": "investigation",
+      "annotation": "get_objects_by_collection_id",
+      "api_output_schema": "get_output_schema",
+      "output_schema": {},
+      "parameters": [
+        {
+          "title": "collection ID",
+          "name": "collectionID",
+          "visible": true,
+          "required": true,
+          "editable": true,
+          "type": "text",
+          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
+          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+        },
+        {
+          "title": "Added After",
+          "name": "added_after",
+          "visible": true,
+          "required": false,
+          "editable": true,
+          "type": "datetime",
+          "tooltip": "Filter the result set to only include the items added after the specified time.",
+          "description": "Filter the result set to only include the items added after the specified time."
+        },
+        {
+          "title": "Save Response in File",
+          "name": "file_response",
+          "visible": true,
+          "required": false,
+          "editable": true,
+          "type": "checkbox",
+          "onchange": {
+            "true": [
+              {
+                "title": "Filename",
+                "name": "filename",
+                "type": "text",
+                "visible": true,
+                "editable": true,
+                "required": false,
+                "placeholder": "Eg. demo.json",
+                "tooltip": "file will create under /tmp directory"
+              }
+            ]
+          },
+          "tooltip": "If check then save the response in File else in JSON",
+          "description": "Specify the response field, If check then save the response in File else in JSON"
+        }
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "get_output_schema",
+      "annotation": "get_output_schema",
+      "description": "Gives the output schema based on the inputs",
+      "title": "Get Output Schema",
+      "enabled": true,
+      "visible": false,
+      "parameters": [],
+      "output_schema": {}
+    },
+    {
+      "operation": "get_objects_by_object_id",
+      "title": "Get Object By Object ID",
+      "description": "Returns general information for the specific object in one collection.",
+      "category": "investigation",
+      "annotation": "get_objects_by_object_id",
+      "output_schema": {
+        "id": "",
+        "objects": [
+          {
+            "created": "",
+            "description": "",
+            "id": "",
+            "labels": [
+            ],
+            "modified": "",
+            "name": "",
+            "object_marking_refs": [
+            ],
+            "pattern": "",
+            "type": "",
+            "valid_from": ""
+          },
+          {
+            "created": "",
+            "definition": {
+              "tlp": ""
+            },
+            "definition_type": "",
+            "id": "",
+            "type": ""
+          }
+        ],
+        "spec_version": "",
+        "type": ""
+      },
+      "parameters": [
+        {
+          "title": "collection ID",
+          "name": "collectionID",
+          "visible": true,
+          "required": true,
+          "editable": true,
+          "type": "text",
+          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
+          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+        },
+        {
+          "title": "Object ID",
+          "name": "objectID",
+          "visible": true,
+          "required": true,
+          "editable": true,
+          "type": "text",
+          "tooltip": "ID Of the Object to get.",
+          "description": "ID Of the Object to get."
+        }
+      ],
+      "enabled": true
+    },
+    {
+      "operation": "get_manifest_by_collection_id",
+      "title": "Get Manifest By Collection ID",
+      "description": "Returns manifest information about all available objects.",
+      "category": "investigation",
+      "annotation": "get_manifest_by_collection_id",
+      "output_schema": {
+        "objects": [
+          {
+            "date_added": "",
+            "id": "",
+            "media_types": [
+            ],
+            "versions": [
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "title": "collection ID",
+          "name": "collectionID",
+          "visible": true,
+          "required": true,
+          "editable": true,
+          "type": "text",
+          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
+          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+        },
+        {
+          "title": "Added After",
+          "name": "added_after",
+          "visible": true,
+          "required": false,
+          "editable": true,
+          "type": "datetime",
+          "tooltip": "Filter the result set to only include the items added after the specified time.",
+          "description": "Filter the result set to only include the items added after the specified time."
+        }
+      ],
+      "enabled": true
+    }
+  ]
+}
