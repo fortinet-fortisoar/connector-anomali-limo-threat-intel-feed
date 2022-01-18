@@ -12,6 +12,7 @@ import requests
 from datetime import datetime
 from connectors.cyops_utilities.builtins import create_file_from_string
 from taxii2client.v20 import Collection, as_pages
+
 try:
     from integrations.crudhub import trigger_ingest_playbook
 except:
@@ -21,9 +22,6 @@ except:
 from connectors.core.connector import get_logger, ConnectorError
 
 logger = get_logger('anomali-limo-threat-intel-feed')
-
-
-BATCH_SIZE = 2000
 
 
 class TaxiiClient(object):
@@ -115,7 +113,7 @@ def get_collections(config, params, **kwargs):
     taxii = TaxiiClient(config)
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     if params:
-        response = taxii.make_request_taxii(endpoint='collections/' + params['collectionID'] + '/')
+        response = taxii.make_request_taxii(endpoint='collections/' + str(params['collectionID']) + '/')
     else:
         response = taxii.make_request_taxii(endpoint='collections/')
     if response.get('collections'):
@@ -127,6 +125,7 @@ def get_collections(config, params, **kwargs):
 def get_objects_by_collection_id(config, params, **kwargs):
     taxii = TaxiiClient(config)
     created_after = params.get('added_after')
+    mode = params.get('output_mode')
     if created_after and type(created_after) == int:
         # convert to epoch
         created_after = datetime.fromtimestamp(created_after).strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -144,13 +143,21 @@ def get_objects_by_collection_id(config, params, **kwargs):
             server_url + 'api/v1/taxii2/feeds/collections/' + str(params.get('collectionID')) + '/',
             user=username, password=password)
         response = []
+        create_pb_id = params.get("create_pb_id")
         for bundle in as_pages(collection.get_objects, added_after=created_after, start=params.get('offset'),
                                per_request=1000):
             if bundle.get("objects"):
-                response.extend(bundle["objects"])
+                if mode == 'Create as Feed Records in FortiSOAR':
+                    filtered_indicators = [indicator for indicator in bundle["objects"] if
+                                           indicator["type"] == "indicator"]
+                    trigger_ingest_playbook(filtered_indicators, create_pb_id, parent_env=kwargs.get('env', {}),
+                                            batch_size=len(filtered_indicators), dedup_field="pattern")
+                else:
+                    response.extend(bundle["objects"])
             else:
                 break
-    else :
+        filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
+    else:
         params = {k: v for k, v in params.items() if v is not None and v != ''}
         wanted_keys = set(['added_after'])
         query_params = {k: params[k] for k in params.keys() & wanted_keys}
@@ -158,13 +165,12 @@ def get_objects_by_collection_id(config, params, **kwargs):
         response = taxii.make_request_taxii(endpoint='collections/' + str(params.get('collectionID')) + '/objects/',
                                             params=query_params, headers=headers)
         response = response.get("objects", [])
-
-    filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
-    mode = params.get('output_mode')
-    if mode == 'Create as Feed Records in FortiSOAR':
-        create_pb_id = params.get("create_pb_id")
-        trigger_ingest_playbook(filtered_indicators, create_pb_id, parent_env=kwargs.get('env', {}), batch_size=1000, dedup_field="pattern")
-        return 'Successfully triggered playbooks to create feed records'
+        filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
+        if mode == 'Create as Feed Records in FortiSOAR':
+            create_pb_id = params.get("create_pb_id")
+            trigger_ingest_playbook(filtered_indicators, create_pb_id, parent_env=kwargs.get('env', {}), batch_size=1000,
+                                    dedup_field="pattern")
+            return 'Successfully triggered playbooks to create feed records'
     seen = set()
     deduped_indicators = [x for x in filtered_indicators if [x["pattern"] not in seen, seen.add(x["pattern"])][0]]
     if mode == 'Save to File':
@@ -177,7 +183,7 @@ def get_objects_by_object_id(config, params, **kwargs):
     taxii = TaxiiClient(config)
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     return taxii.make_request_taxii(
-        endpoint='collections/' + params['collectionID'] + '/objects/' + params['objectID'] + '/')
+        endpoint='collections/' + str(params['collectionID']) + '/objects/' + params['objectID'] + '/')
 
 
 def get_manifest_by_collection_id(config, params, **kwargs):
@@ -185,7 +191,7 @@ def get_manifest_by_collection_id(config, params, **kwargs):
     params = {k: v for k, v in params.items() if v is not None and v != ''}
     wanted_keys = set(['added_after'])
     query_params = {k: params[k] for k in params.keys() & wanted_keys}
-    return taxii.make_request_taxii(endpoint='collections/' + params['collectionID'] + '/manifest/',
+    return taxii.make_request_taxii(endpoint='collections/' + str(params['collectionID']) + '/manifest/',
                                     params=query_params)
 
 

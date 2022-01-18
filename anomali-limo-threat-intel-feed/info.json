@@ -1,7 +1,7 @@
 {
   "name": "anomali-limo-threat-intel-feed",
   "label": "Anomali Limo Threat Intel Feed",
-  "description": "Anomali Limo Threat Intelligence Feed Integration",
+  "description": "Anomali Limo is a preconfigured set of intelligence feeds that STAXX users can access immediately upon download, and which offers indicators and insights spanning threat categories you need to secure your business. This connector facilitates automated interactions, such as returning the list of public, private, and shared collection resources to which the user has access, returning general information for a specific object of a specific collection, etc.",
   "publisher": "Fortinet",
   "cs_approved": true,
   "cs_compatible": true,
@@ -17,7 +17,9 @@
     "scheduled"
   ],
   "ingestion_preferences": {
-    "modules": ["threat_intel_feeds"]
+    "modules": [
+      "threat_intel_feeds"
+    ]
   },
   "help_online": "",
   "configuration": {
@@ -29,16 +31,18 @@
         "visible": true,
         "type": "text",
         "name": "server_url",
-        "value": "https://limo.anomali.com"
+        "value": "https://limo.anomali.com",
+        "description": "The URL of the Anomali Limo Threat Intel Feed server to which you will connect and perform the automated operations."
       },
       {
-        "title": "User Name",
+        "title": "Username",
         "required": true,
         "editable": true,
         "visible": true,
         "type": "text",
         "name": "username",
-        "value": "guest"
+        "value": "guest",
+        "description": "The username used to access the Anomali Limo Threat Intel Feed server to which you will connect and perform the automated operations."
       },
       {
         "title": "Password",
@@ -47,7 +51,8 @@
         "visible": true,
         "type": "password",
         "name": "password",
-        "value": "guest"
+        "value": "guest",
+        "description": "The password used to access the Anomali Limo Threat Intel Feed server to which you will connect and perform the automated operations."
       },
       {
         "title": "Verify SSL",
@@ -56,7 +61,8 @@
         "visible": true,
         "type": "checkbox",
         "name": "verify_ssl",
-        "value": true
+        "value": true,
+        "description": "Specifies whether the SSL certificate for the server is to be verified or not. By default, this option is set as True."
       }
     ]
   },
@@ -64,7 +70,7 @@
     {
       "operation": "get_api_root_information",
       "title": "Get API Root Information",
-      "description": "Returns information contains title, description, TAXII versions and maximum size of the content body for the specified TAXII server.",
+      "description": "Returns information containing the title, description, TAXII versions, and maximum size of the content body for the specified TAXII server.",
       "category": "investigation",
       "annotation": "get_api_root_information",
       "output_schema": {
@@ -81,7 +87,7 @@
     {
       "operation": "get_collections",
       "title": "Get Collections",
-      "description": "Returns the list of public/private/shared collection resources to which the user has access.",
+      "description": "Returns the list of public, private, and shared collection resources to which the user has access.",
       "category": "investigation",
       "annotation": "get_collections",
       "output_schema": {
@@ -97,14 +103,14 @@
       },
       "parameters": [
         {
-          "title": "collection ID",
+          "title": "Collection ID",
           "name": "collectionID",
           "visible": true,
           "required": false,
           "editable": true,
           "type": "text",
-          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
-          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+          "tooltip": "(Optional) The ID of the collection whose general information such as ID, title, description, can_read, can_write, and media_types you want to retrieve from Anomali Limo Threat Intel Feed.",
+          "description": "(Optional) The ID of the collection whose general information such as ID, title, description, can_read, can_write, and media_types you want to retrieve from Anomali Limo Threat Intel Feed."
         }
       ],
       "enabled": true
@@ -112,7 +118,7 @@
     {
       "operation": "get_objects_by_collection_id",
       "title": "Get Objects By Collection ID",
-      "description": "Retrieve all available objects in a Collection.",
+      "description": "Retrieves all available objects of a specific collection from Anomali Limo Threat Intel Feed based on the collection ID and other input parameters you have specified.",
       "category": "investigation",
       "annotation": "get_objects_by_collection_id",
       "api_output_schema": "get_output_schema",
@@ -125,8 +131,8 @@
           "required": true,
           "editable": true,
           "type": "text",
-          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
-          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+          "tooltip": "The ID of the collection whose general information such as ID, title, description, can_read, can_write, and media_types you want to retrieve from Anomali Limo Threat Intel Feed.",
+          "description": "The ID of the collection whose general information such as ID, title, description, can_read, can_write, and media_types you want to retrieve from Anomali Limo Threat Intel Feed."
         },
         {
           "title": "Created After",
@@ -135,20 +141,24 @@
           "required": false,
           "editable": true,
           "type": "datetime",
-          "tooltip": "Filter the result set to only include the items added after the specified time.",
-          "description": "Filter the result set to only include the items added after the specified time."
+          "tooltip": "(Optional) The Datetime using which you want to filter the result set to only include only those items that have been created after the specified time.",
+          "description": "(Optional) The Datetime using which you want to filter the result set to only include only those items that have been created after the specified time."
         },
         {
-          "title": "Process response as",
+          "title": "Process Response As",
           "name": "output_mode",
           "visible": true,
           "required": false,
           "editable": true,
           "type": "select",
-          "options": ["Create as Feed Records in FortiSOAR", "Save to File", "Return as a JSON"],
+          "options": [
+            "Create as Feed Records in FortiSOAR",
+            "Save to File",
+            "Return as a JSON"
+          ],
           "value": "Save to File",
-          "tooltip": "The Feed Data can either be returned as a JSON; written to a file on the FortiSOAR server; or Created as Feed Records in FortiSOAR",
-          "description": "The Feed Data can either be returned as a JSON; written to a file on the FortiSOAR server; or Created as Feed Records in FortiSOAR",
+          "tooltip": "Select the method of returning the Feed Data information. You can choose between the data being create as Feed records in FortiSOAR or returned in the JSON format (Return as a JSON) or being written to a file on the FortiSOAR server (Save to File). If you choose the 'Create as Feed Records in FortiSOAR' option, then in Record Creation Playbook IRI field, specify the IRI of the Create Record playbooks IRI, else if if you choose 'Save to File' option, then in the Filename field, specify the name of the file in which you want to save the feed information retrieved from Anomali Limo.",
+          "description": "Select the method of returning the Feed Data information. You can choose between the data being create as Feed records in FortiSOAR or returned in the JSON format (Return as a JSON) or being written to a file on the FortiSOAR server (Save to File). If you choose the 'Create as Feed Records in FortiSOAR' option, then in Record Creation Playbook IRI field, specify the IRI of the Create Record playbooks IRI, else if if you choose 'Save to File' option, then in the Filename field, specify the name of the file in which you want to save the feed information retrieved from Anomali Limo.",
           "onchange": {
             "Create as Feed Records in FortiSOAR": [
               {
@@ -185,8 +195,8 @@
           "required": true,
           "placeholder": "0",
           "value": "0",
-          "tooltip": "From which offset you want to fetch indicators",
-          "description": "From which offset you want to fetch indicators"
+          "tooltip": "(Optional) The offset value retrieves a subset of records that starts from the offset value. The offset works with the 'Limit' parameter, which determines how many records to retrieve starting from the offset.",
+          "description": "(Optional) The offset value retrieves a subset of records that starts from the offset value. The offset works with the 'Limit' parameter, which determines how many records to retrieve starting from the offset."
         },
         {
           "title": "Limit",
@@ -196,8 +206,8 @@
           "editable": true,
           "required": false,
           "placeholder": "1000",
-          "tooltip": "Maximum number of indicators to fetch. If not specified, all objects in the specified collection are fetched.",
-          "description": "Maximum number of indicators to fetch. If not specified, all objects in the specified collection are fetched."
+          "tooltip": "(Optional) The maximum number of results that this operation should return. If the 'Limit' is not specified, all objects in the specified collection are retrieved.",
+          "description": "(Optional) The maximum number of results that this operation should return. If the 'Limit' is not specified, all objects in the specified collection are retrieved."
         }
       ],
       "enabled": true
@@ -215,7 +225,7 @@
     {
       "operation": "get_objects_by_object_id",
       "title": "Get Object By Object ID",
-      "description": "Returns general information for the specific object of a collection.",
+      "description": "Returns general information for a specific object of a specific collection from Anomali Limo Threat Intel Feed based on the collection ID and object ID you have specified.",
       "category": "investigation",
       "annotation": "get_objects_by_object_id",
       "output_schema": {
@@ -250,14 +260,14 @@
       },
       "parameters": [
         {
-          "title": "collection ID",
+          "title": "Collection ID",
           "name": "collectionID",
           "visible": true,
           "required": true,
           "editable": true,
           "type": "text",
-          "tooltip": "Collection ID containing the Object.",
-          "description": "Collection ID containing the Object."
+          "tooltip": "The ID of the collection that contains the object whose general information you want to retrieve from Anomali Limo Threat Intel Feed.",
+          "description": "The ID of the collection that contains the object whose general information you want to retrieve from Anomali Limo Threat Intel Feed."
         },
         {
           "title": "Object ID",
@@ -266,8 +276,8 @@
           "required": true,
           "editable": true,
           "type": "text",
-          "tooltip": "ID of the object to be fetched.",
-          "description": "ID of the object to be fetched."
+          "tooltip": "The ID of the object whose general information you want to retrieve from Anomali Limo Threat Intel Feed.",
+          "description": "The ID of the object whose general information you want to retrieve from Anomali Limo Threat Intel Feed."
         }
       ],
       "enabled": true
@@ -275,7 +285,7 @@
     {
       "operation": "get_manifest_by_collection_id",
       "title": "Get Manifest By Collection ID",
-      "description": "Returns manifest information about all available objects.",
+      "description": "Returns manifest information about all available objects of a specific collection from Anomali Limo Threat Intel Feed based on the collection ID and other input parameters you have specified.",
       "category": "investigation",
       "annotation": "get_manifest_by_collection_id",
       "output_schema": {
@@ -292,14 +302,14 @@
       },
       "parameters": [
         {
-          "title": "collection ID",
+          "title": "Collection ID",
           "name": "collectionID",
           "visible": true,
           "required": true,
           "editable": true,
           "type": "text",
-          "tooltip": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types.",
-          "description": "Returns general information about the collection, such as id, title, description, can_read, can_write and media_types."
+          "tooltip": "The ID of the collection whose manifest information you want to retrieve from Anomali Limo Threat Intel Feed.",
+          "description": "The ID of the collection whose manifest information you want to retrieve from Anomali Limo Threat Intel Feed."
         },
         {
           "title": "Added After",
@@ -308,8 +318,8 @@
           "required": false,
           "editable": true,
           "type": "datetime",
-          "tooltip": "Filter the result set to only include the items added after the specified time.",
-          "description": "Filter the result set to only include the items added after the specified time."
+          "tooltip": "(Optional) The Datetime using which you want to filter the result set to only include only those items that are added after the specified time.",
+          "description": "(Optional) The Datetime using which you want to filter the result set to only include only those items that are added after the specified time."
         }
       ],
       "enabled": true
