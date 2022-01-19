@@ -7,11 +7,17 @@ Copyright end
 """
 
 import base64
-from datetime import datetime
 
 import requests
+from datetime import datetime
 from connectors.cyops_utilities.builtins import create_file_from_string
 from taxii2client.v20 import Collection, as_pages
+
+try:
+    from integrations.crudhub import trigger_ingest_playbook
+except:
+    # ignore. lower FSR version
+    pass
 
 from connectors.core.connector import get_logger, ConnectorError
 
@@ -119,6 +125,7 @@ def get_collections(config, params, **kwargs):
 def get_objects_by_collection_id(config, params, **kwargs):
     taxii = TaxiiClient(config)
     created_after = params.get('added_after')
+    mode = params.get('output_mode')
     if created_after and type(created_after) == int:
         # convert to epoch
         created_after = datetime.fromtimestamp(created_after).strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -136,12 +143,20 @@ def get_objects_by_collection_id(config, params, **kwargs):
             server_url + 'api/v1/taxii2/feeds/collections/' + str(params.get('collectionID')) + '/',
             user=username, password=password)
         response = []
+        create_pb_id = params.get("create_pb_id")
         for bundle in as_pages(collection.get_objects, added_after=created_after, start=params.get('offset'),
                                per_request=1000):
             if bundle.get("objects"):
-                response.extend(bundle["objects"])
+                if mode == 'Create as Feed Records in FortiSOAR':
+                    filtered_indicators = [indicator for indicator in bundle["objects"] if
+                                           indicator["type"] == "indicator"]
+                    trigger_ingest_playbook(filtered_indicators, create_pb_id, parent_env=kwargs.get('env', {}),
+                                            batch_size=len(filtered_indicators), dedup_field="pattern")
+                else:
+                    response.extend(bundle["objects"])
             else:
                 break
+        filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
     else:
         params = {k: v for k, v in params.items() if v is not None and v != ''}
         wanted_keys = set(['added_after'])
@@ -150,16 +165,14 @@ def get_objects_by_collection_id(config, params, **kwargs):
         response = taxii.make_request_taxii(endpoint='collections/' + str(params.get('collectionID')) + '/objects/',
                                             params=query_params, headers=headers)
         response = response.get("objects", [])
-    try:
-        # dedup
         filtered_indicators = [indicator for indicator in response if indicator["type"] == "indicator"]
-        seen = set()
-        deduped_indicators = [x for x in filtered_indicators if
-                              [x["pattern"].replace(" ", "") not in seen, seen.add(x["pattern"].replace(" ", ""))][0]]
-    except Exception as e:
-        logger.exception("Import Failed")
-        raise ConnectorError('Ingestion Failed with error: ' + str(e))
-    mode = params.get('output_mode')
+        if mode == 'Create as Feed Records in FortiSOAR':
+            create_pb_id = params.get("create_pb_id")
+            trigger_ingest_playbook(filtered_indicators, create_pb_id, parent_env=kwargs.get('env', {}), batch_size=1000,
+                                    dedup_field="pattern")
+            return 'Successfully triggered playbooks to create feed records'
+    seen = set()
+    deduped_indicators = [x for x in filtered_indicators if [x["pattern"] not in seen, seen.add(x["pattern"])][0]]
     if mode == 'Save to File':
         return create_file_from_string(contents=deduped_indicators, filename=params.get('filename'))
     else:
