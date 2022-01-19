@@ -8,253 +8,14 @@
       "visible": true,
       "image": "medium.png",
       "uuid": "bd186ecd-ad4a-4910-a1ff-6e4d762d3ae6",
-      "id": 138,
+      "id": 15,
       "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-      "createDate": 1642489319.796636,
+      "createDate": 1642515430.946121,
       "modifyUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-      "modifyDate": 1642489319.796636,
+      "modifyDate": 1642515430.946121,
       "recordTags": [],
       "deletedAt": null,
       "workflows": [
-        {
-          "@type": "Workflow",
-          "triggerLimit": null,
-          "name": "Anomali Limo > Ingest",
-          "aliasName": null,
-          "tag": null,
-          "description": "Fetch Collections from Anomali Threat Intelligence Feed",
-          "isActive": false,
-          "debug": false,
-          "singleRecordExecution": false,
-          "remoteExecutableFlag": false,
-          "parameters": [],
-          "synchronous": false,
-          "lastModifyDate": 1642498555,
-          "collection": "/api/3/workflow_collections/bd186ecd-ad4a-4910-a1ff-6e4d762d3ae6",
-          "versions": [],
-          "triggerStep": "/api/3/workflow_steps/99b0d430-0dfe-426e-af5a-f726d0d25120",
-          "steps": [
-            {
-              "@type": "WorkflowStep",
-              "name": "Start",
-              "description": null,
-              "arguments": {
-                "step_variables": {
-                  "input": {
-                    "params": []
-                  }
-                }
-              },
-              "status": null,
-              "top": "30",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
-              "uuid": "99b0d430-0dfe-426e-af5a-f726d0d25120",
-              "id": 5780
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Configuration",
-              "description": null,
-              "arguments": {
-                "fetchTime": "{{arrow.utcnow().int_timestamp}}",
-                "pullTimeMacro": "AnomaliLimoFeedLastPullTime_{{vars['audit_info']['cyops_playbook_iri'].split('/')[-1].replace('-','_')}}"
-              },
-              "status": null,
-              "top": "165",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "0cfd2cff-194a-4049-9106-03bf98e15c3a",
-              "id": 5781
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Update Pull Time",
-              "description": null,
-              "arguments": {
-                "params": {
-                  "macro": "{{vars.pullTimeMacro}}",
-                  "value": "{{vars.fetchTime}}"
-                },
-                "version": "3.1.2",
-                "connector": "cyops_utilities",
-                "operation": "updatemacro",
-                "operationTitle": "CyOPs: Update Macro",
-                "step_variables": []
-              },
-              "status": null,
-              "top": "840",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-              "uuid": "4e0f6122-d74f-44f4-bbc9-2768ba1fe041",
-              "id": 5782
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Get Macro Value",
-              "description": null,
-              "arguments": {
-                "params": {
-                  "iri": "/api/wf/api/dynamic-variable/?name={{vars.pullTimeMacro}}",
-                  "body": "",
-                  "method": "GET"
-                },
-                "version": "3.1.2",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-              },
-              "status": null,
-              "top": "300",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-              "uuid": "1339cda3-f5b8-4b98-b5ec-1020aea1b46f",
-              "id": 5783
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Extract Value from Response",
-              "description": null,
-              "arguments": {
-                "lastPullTime": "{% if (vars.steps.Get_Macro_Value.data[\"hydra:member\"] | length) > 0%}{{vars.steps.Get_Macro_Value.data[\"hydra:member\"][0].value }}{% else %}0{% endif %}"
-              },
-              "status": null,
-              "top": "435",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "5333a1e5-fbf3-4877-ac8d-16245e7cb47c",
-              "id": 5784
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Get All Collections",
-              "description": null,
-              "arguments": {
-                "name": "Anomali Limo Threat Intel Feed",
-                "config": "88b06fa5-fb85-4d9c-9af6-32147b646cb6",
-                "params": [],
-                "version": "2.0.0",
-                "connector": "anomali-limo-threat-intel-feed",
-                "operation": "get_collections",
-                "operationTitle": "Get Collections",
-                "pickFromTenant": false,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "570",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
-              "uuid": "579d5449-b805-454f-b824-021af0787c2d",
-              "id": 5785
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Fetch and Create",
-              "description": null,
-              "arguments": {
-                "name": "Anomali Limo Threat Intel Feed",
-                "config": "88b06fa5-fb85-4d9c-9af6-32147b646cb6",
-                "params": {
-                  "limit": "",
-                  "offset": "0",
-                  "added_after": "{{vars.lastPullTime}}",
-                  "output_mode": "Create as Feed Records in FortiSOAR",
-                  "collectionID": "{{ vars.item.id }}",
-                  "create_pb_id": "cc47ea13-5f9b-409e-9a50-3c80bd008140"
-                },
-                "version": "2.0.0",
-                "for_each": {
-                  "item": "{{vars.steps.Get_All_Collections.data.collections}}",
-                  "parallel": false,
-                  "condition": ""
-                },
-                "connector": "anomali-limo-threat-intel-feed",
-                "operation": "get_objects_by_collection_id",
-                "operationTitle": "Get Objects By Collection ID",
-                "pickFromTenant": false,
-                "step_variables": []
-              },
-              "status": null,
-              "top": "705",
-              "left": "125",
-              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
-              "uuid": "f11e9dc8-068a-4377-ac95-cc69166a0e15",
-              "id": 5786
-            }
-          ],
-          "routes": [
-            {
-              "@type": "WorkflowRoute",
-              "name": "Start -> Configuration",
-              "targetStep": "/api/3/workflow_steps/0cfd2cff-194a-4049-9106-03bf98e15c3a",
-              "sourceStep": "/api/3/workflow_steps/99b0d430-0dfe-426e-af5a-f726d0d25120",
-              "label": null,
-              "isExecuted": false,
-              "uuid": "28a2974c-54bb-489a-8d6a-d9f16a5728de"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Configuration -> Get Macro Value",
-              "targetStep": "/api/3/workflow_steps/1339cda3-f5b8-4b98-b5ec-1020aea1b46f",
-              "sourceStep": "/api/3/workflow_steps/0cfd2cff-194a-4049-9106-03bf98e15c3a",
-              "label": null,
-              "isExecuted": false,
-              "uuid": "5ea5e94e-fc9e-44e1-8353-d50e9322a7a6"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Get Macro Value -> Extract Value from Response",
-              "targetStep": "/api/3/workflow_steps/5333a1e5-fbf3-4877-ac8d-16245e7cb47c",
-              "sourceStep": "/api/3/workflow_steps/1339cda3-f5b8-4b98-b5ec-1020aea1b46f",
-              "label": null,
-              "isExecuted": false,
-              "uuid": "72d6d791-b283-4271-9f08-3951e6342553"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Extract Value from Response -> Get All Collections 2",
-              "targetStep": "/api/3/workflow_steps/579d5449-b805-454f-b824-021af0787c2d",
-              "sourceStep": "/api/3/workflow_steps/5333a1e5-fbf3-4877-ac8d-16245e7cb47c",
-              "label": null,
-              "isExecuted": false,
-              "uuid": "5c2a07ac-a908-4e1f-ac03-510543586738"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Get All Collections 2 -> Fetch and Create 2",
-              "targetStep": "/api/3/workflow_steps/f11e9dc8-068a-4377-ac95-cc69166a0e15",
-              "sourceStep": "/api/3/workflow_steps/579d5449-b805-454f-b824-021af0787c2d",
-              "label": null,
-              "isExecuted": false,
-              "uuid": "27fdd6d5-8d2e-4e8d-a1da-4108d86a81e9"
-            },
-            {
-              "@type": "WorkflowRoute",
-              "name": "Fetch and Create 2 -> Update Pull Time",
-              "targetStep": "/api/3/workflow_steps/4e0f6122-d74f-44f4-bbc9-2768ba1fe041",
-              "sourceStep": "/api/3/workflow_steps/f11e9dc8-068a-4377-ac95-cc69166a0e15",
-              "label": null,
-              "isExecuted": false,
-              "uuid": "535dee4a-12e4-4736-bc11-9d01fed86448"
-            }
-          ],
-          "priority": "/api/3/picklists/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
-          "uuid": "379b1d3a-4f2f-47dd-876d-0f24431f0c58",
-          "recordTags": [
-            "dataingestion",
-            "ingest",
-            "anomali-limo-threat-intel-feed"
-          ],
-          "id": 1355,
-          "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1642489319.79975,
-          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1642498554.924476,
-          "owners": [],
-          "isPrivate": false,
-          "deletedAt": null
-        },
         {
           "@type": "Workflow",
           "triggerLimit": null,
@@ -297,7 +58,7 @@
               "left": "20",
               "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
               "uuid": "968f5f37-700a-44a3-b6cc-4acfb0a4fe34",
-              "id": 5787
+              "id": 228
             },
             {
               "@type": "WorkflowStep",
@@ -323,7 +84,7 @@
               "left": "188",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "uuid": "b0faa69c-494d-40b1-9fa3-0dbd92b1f108",
-              "id": 5788
+              "id": 229
             }
           ],
           "routes": [
@@ -342,11 +103,11 @@
           "recordTags": [
             "anomali-limo-threat-intel-feed"
           ],
-          "id": 1356,
+          "id": 60,
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1642489319.804059,
-          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1642505782.299361,
+          "createDate": 1642515430.95274,
+          "modifyUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
+          "modifyDate": 1642515430.95274,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -393,7 +154,7 @@
               "left": "20",
               "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
               "uuid": "5a9ddc88-fb69-4143-9077-c32363085b51",
-              "id": 5789
+              "id": 230
             },
             {
               "@type": "WorkflowStep",
@@ -424,7 +185,7 @@
               "left": "180",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "uuid": "2aec2a2e-c037-4a38-8b7d-cbd001b55d69",
-              "id": 5790
+              "id": 231
             },
             {
               "@type": "WorkflowStep",
@@ -451,7 +212,7 @@
               "left": "340",
               "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
               "uuid": "5793100c-be1b-4890-924d-df15255f5017",
-              "id": 5831
+              "id": 232
             },
             {
               "@type": "WorkflowStep",
@@ -465,7 +226,7 @@
               "left": "160",
               "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
               "uuid": "9b492935-54d0-4241-a829-1fc0427012a0",
-              "id": 5832
+              "id": 233
             },
             {
               "@type": "WorkflowStep",
@@ -491,7 +252,7 @@
               "left": "500",
               "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
               "uuid": "38d9c5b0-0419-4808-a5c4-19aba6493170",
-              "id": 5833
+              "id": 234
             }
           ],
           "routes": [
@@ -537,11 +298,11 @@
           "recordTags": [
             "anomali-limo-threat-intel-feed"
           ],
-          "id": 1357,
+          "id": 61,
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1642489319.805326,
-          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1642505795.151427,
+          "createDate": 1642515430.953741,
+          "modifyUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
+          "modifyDate": 1642515430.953741,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -588,7 +349,7 @@
               "left": "20",
               "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
               "uuid": "960304c8-ea92-4e53-9192-edf26bafaf14",
-              "id": 5791
+              "id": 235
             },
             {
               "@type": "WorkflowStep",
@@ -614,7 +375,7 @@
               "left": "188",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "uuid": "ad7a74fd-9f77-4a2d-9987-ab7dedfcfe26",
-              "id": 5792
+              "id": 236
             }
           ],
           "routes": [
@@ -633,11 +394,11 @@
           "recordTags": [
             "anomali-limo-threat-intel-feed"
           ],
-          "id": 1358,
+          "id": 62,
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1642489319.806475,
-          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1642505767.208587,
+          "createDate": 1642515430.955352,
+          "modifyUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
+          "modifyDate": 1642515430.955352,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -684,7 +445,7 @@
               "left": "20",
               "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
               "uuid": "ebc668dd-9218-4872-bc11-2d5154367009",
-              "id": 5793
+              "id": 237
             },
             {
               "@type": "WorkflowStep",
@@ -707,7 +468,7 @@
               "left": "188",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "uuid": "0ff80d2e-02e8-4f30-8a04-267bee12fb3c",
-              "id": 5794
+              "id": 238
             }
           ],
           "routes": [
@@ -726,11 +487,11 @@
           "recordTags": [
             "anomali-limo-threat-intel-feed"
           ],
-          "id": 1359,
+          "id": 63,
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1642489319.807622,
-          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1642505739.469445,
+          "createDate": 1642515430.956334,
+          "modifyUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
+          "modifyDate": 1642515430.956334,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -777,7 +538,7 @@
               "left": "20",
               "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
               "uuid": "ce8d9e99-1cde-443a-ad3e-eaf43bc6cdd0",
-              "id": 5795
+              "id": 239
             },
             {
               "@type": "WorkflowStep",
@@ -802,7 +563,7 @@
               "left": "188",
               "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
               "uuid": "6cd57a3b-2e2e-4d31-bd2c-d834598d5ba9",
-              "id": 5796
+              "id": 240
             }
           ],
           "routes": [
@@ -821,11 +582,11 @@
           "recordTags": [
             "anomali-limo-threat-intel-feed"
           ],
-          "id": 1360,
+          "id": 64,
           "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1642489319.80837,
-          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1642505753.928561,
+          "createDate": 1642515430.957328,
+          "modifyUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
+          "modifyDate": 1642515430.957328,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -833,10 +594,249 @@
         {
           "@type": "Workflow",
           "triggerLimit": null,
-          "name": "> Anomali Limo > Fetch and Create",
+          "name": "Anomali Limo > Fetch and Ingest",
           "aliasName": null,
           "tag": null,
-          "description": "Fetch and Create Indicators from Anomali Limo Threat Intelligence Feed",
+          "description": "Fetch Collections from Anomali Threat Intelligence Feed",
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [],
+          "synchronous": false,
+          "lastModifyDate": 1642588234,
+          "collection": "/api/3/workflow_collections/bd186ecd-ad4a-4910-a1ff-6e4d762d3ae6",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/a781be7b-60d6-4429-8154-4e722458de49",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "fetchTime": "{{arrow.utcnow().int_timestamp}}",
+                "pullTimeMacro": "AnomaliLimoFeedLastPullTime_{{vars['audit_info']['cyops_playbook_iri'].split('/')[-1].replace('-','_')}}"
+              },
+              "status": null,
+              "top": "165",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "70e84f59-c8fd-459f-b55a-739db99137df",
+              "id": 4392
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Update Pull Time",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "macro": "{{vars.pullTimeMacro}}",
+                  "value": "{{vars.fetchTime}}"
+                },
+                "version": "3.1.2",
+                "connector": "cyops_utilities",
+                "operation": "updatemacro",
+                "operationTitle": "CyOPs: Update Macro",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "840",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "uuid": "a8853e96-b694-4b12-94a8-8a8ec98ab8f9",
+              "id": 4393
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Get Macro Value",
+              "description": null,
+              "arguments": {
+                "params": {
+                  "iri": "/api/wf/api/dynamic-variable/?name={{vars.pullTimeMacro}}",
+                  "body": "",
+                  "method": "GET"
+                },
+                "version": "3.1.2",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+              },
+              "status": null,
+              "top": "300",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+              "uuid": "2495bae5-e502-436e-a432-c0d99e254278",
+              "id": 4394
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Extract Value from Response",
+              "description": null,
+              "arguments": {
+                "lastPullTime": "{% if (vars.steps.Get_Macro_Value.data[\"hydra:member\"] | length) > 0%}{{vars.steps.Get_Macro_Value.data[\"hydra:member\"][0].value }}{% else %}0{% endif %}"
+              },
+              "status": null,
+              "top": "435",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "cc54f8c7-c0d6-44df-87ae-ce7c1598fba8",
+              "id": 4395
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Get All Collections",
+              "description": null,
+              "arguments": {
+                "name": "Anomali Limo Threat Intel Feed",
+                "config": "d390fbd1-45cf-423e-abb6-adf9ba92de9a",
+                "params": [],
+                "version": "2.0.0",
+                "connector": "anomali-limo-threat-intel-feed",
+                "operation": "get_collections",
+                "operationTitle": "Get Collections",
+                "pickFromTenant": false,
+                "step_variables": []
+              },
+              "status": null,
+              "top": "570",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "uuid": "20c57544-d5e3-4406-a739-50b635bd5b2b",
+              "id": 4396
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Fetch and Create",
+              "description": null,
+              "arguments": {
+                "name": "Anomali Limo Threat Intel Feed",
+                "config": "d390fbd1-45cf-423e-abb6-adf9ba92de9a",
+                "params": {
+                  "limit": "",
+                  "offset": "0",
+                  "added_after": "{{vars.lastPullTime}}",
+                  "output_mode": "Create as Feed Records in FortiSOAR",
+                  "collectionID": "{{ vars.item.id }}",
+                  "create_pb_id": "cc47ea13-5f9b-409e-9a50-3c80bd008140"
+                },
+                "version": "2.0.0",
+                "for_each": {
+                  "item": "{{vars.steps.Get_All_Collections.data.collections}}",
+                  "parallel": false,
+                  "condition": ""
+                },
+                "connector": "anomali-limo-threat-intel-feed",
+                "operation": "get_objects_by_collection_id",
+                "operationTitle": "Get Objects By Collection ID",
+                "pickFromTenant": false,
+                "step_variables": []
+              },
+              "status": null,
+              "top": "705",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "uuid": "832801df-4e7d-4253-bcdd-a652462cc722",
+              "id": 4397
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "step_variables": {
+                  "input": {
+                    "params": []
+                  }
+                }
+              },
+              "status": null,
+              "top": "30",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+              "uuid": "a781be7b-60d6-4429-8154-4e722458de49",
+              "id": 4404
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Configuration -> Get Macro Value",
+              "targetStep": "/api/3/workflow_steps/2495bae5-e502-436e-a432-c0d99e254278",
+              "sourceStep": "/api/3/workflow_steps/70e84f59-c8fd-459f-b55a-739db99137df",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "1b08bf13-bab9-4e43-89dc-93141548e95d"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Get Macro Value -> Extract Value from Response",
+              "targetStep": "/api/3/workflow_steps/cc54f8c7-c0d6-44df-87ae-ce7c1598fba8",
+              "sourceStep": "/api/3/workflow_steps/2495bae5-e502-436e-a432-c0d99e254278",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "195730c4-06cc-429a-a31f-15ace9ed1ac3"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Extract Value from Response -> Get All Collections 2",
+              "targetStep": "/api/3/workflow_steps/20c57544-d5e3-4406-a739-50b635bd5b2b",
+              "sourceStep": "/api/3/workflow_steps/cc54f8c7-c0d6-44df-87ae-ce7c1598fba8",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "b7b8f334-86e8-46b4-b465-cd5a3e7fe971"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Get All Collections 2 -> Fetch and Create 2",
+              "targetStep": "/api/3/workflow_steps/832801df-4e7d-4253-bcdd-a652462cc722",
+              "sourceStep": "/api/3/workflow_steps/20c57544-d5e3-4406-a739-50b635bd5b2b",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "5bd10e85-1399-417d-9e01-1b170844876e"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Fetch and Create 2 -> Update Pull Time",
+              "targetStep": "/api/3/workflow_steps/a8853e96-b694-4b12-94a8-8a8ec98ab8f9",
+              "sourceStep": "/api/3/workflow_steps/832801df-4e7d-4253-bcdd-a652462cc722",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "648d07cb-3910-4ab9-98c8-f83e8b3c85c1"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Configuration",
+              "targetStep": "/api/3/workflow_steps/70e84f59-c8fd-459f-b55a-739db99137df",
+              "sourceStep": "/api/3/workflow_steps/a781be7b-60d6-4429-8154-4e722458de49",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "be80e2c4-898b-4b6f-88f3-464fd1527f48"
+            }
+          ],
+          "priority": "/api/3/picklists/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+          "uuid": "9408e81d-b9ea-4f18-997d-38c9bc04558f",
+          "recordTags": [
+            "dataingestion",
+            "ingest",
+            "anomali-limo-threat-intel-feed"
+          ],
+          "id": 1121,
+          "createUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
+          "createDate": 1642587891.893417,
+          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
+          "modifyDate": 1642588233.977574,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null
+        },
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "> Anomali Limo > Create Record",
+          "aliasName": null,
+          "tag": null,
+          "description": "Create Indicators from Anomali Limo Threat Intelligence Feed",
           "isActive": false,
           "debug": false,
           "singleRecordExecution": false,
@@ -845,10 +845,10 @@
             "ingestedData"
           ],
           "synchronous": false,
-          "lastModifyDate": 1642500832,
+          "lastModifyDate": 1642588256,
           "collection": "/api/3/workflow_collections/bd186ecd-ad4a-4910-a1ff-6e4d762d3ae6",
           "versions": [],
-          "triggerStep": "/api/3/workflow_steps/786477fc-5ca6-4092-bea1-f1d1db6720ae",
+          "triggerStep": "/api/3/workflow_steps/784dcd12-d5b4-4413-ac15-5d973900b598",
           "steps": [
             {
               "@type": "WorkflowStep",
@@ -866,8 +866,8 @@
               "top": "40",
               "left": "40",
               "stepType": "/api/3/workflow_step_types/b348f017-9a94-471f-87f8-ce88b6a7ad62",
-              "uuid": "786477fc-5ca6-4092-bea1-f1d1db6720ae",
-              "id": 5797
+              "uuid": "784dcd12-d5b4-4413-ac15-5d973900b598",
+              "id": 4398
             },
             {
               "@type": "WorkflowStep",
@@ -877,14 +877,14 @@
                 "conditions": [
                   {
                     "option": "Yes, For Mapping",
-                    "step_iri": "/api/3/workflow_steps/28271ed7-7878-46d2-9129-89cc65a69d2c",
+                    "step_iri": "/api/3/workflow_steps/d8312940-051d-4f94-897c-2491cf6d3bf1",
                     "condition": "{{ vars.request.env_setup == true }}",
                     "step_name": "Return Sample Data"
                   },
                   {
                     "option": "No, For Ingestion",
                     "default": true,
-                    "step_iri": "/api/3/workflow_steps/3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
+                    "step_iri": "/api/3/workflow_steps/6eb1af7e-460a-4f50-9243-438764ee65e5",
                     "step_name": "Create Record"
                   }
                 ]
@@ -893,8 +893,60 @@
               "top": "320",
               "left": "560",
               "stepType": "/api/3/workflow_step_types/12254cf5-5db7-4b1a-8cb1-3af081924b28",
-              "uuid": "94eb6a52-72ac-468b-839d-6738923263fa",
-              "id": 5798
+              "uuid": "db0cc261-9d5d-4036-9765-9dfb35413457",
+              "id": 4399
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Return Sample Data",
+              "description": null,
+              "arguments": {
+                "data": "[\n        {\n            \"id\": \"indicator--5fc62c9b-4acd-47b5-8642-8477acf71a59\",\n            \"name\": \"File hash indicator for sha256 hash 057a48fe378586b6913d29b4b10162b4b5045277f1be66b7a01fb7e30bd05ef3\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"xfe-malware-risk-low\"\n            ],\n            \"created\": \"2022-01-12T12:56:25.658Z\",\n            \"pattern\": \"[ file:hashes.'SHA-256' = '057a48fe378586b6913d29b4b10162b4b5045277f1be66b7a01fb7e30bd05ef3' ]\",\n            \"modified\": \"2022-01-12T12:56:25.658Z\",\n            \"valid_from\": \"2022-01-12T12:56:25.658Z\",\n            \"description\": \"File hash indicator for sha256 hash 057a48fe378586b6913d29b4b10162b4b5045277f1be66b7a01fb7e30bd05ef3\"\n          },\n          {\n            \"id\": \"indicator--f782bb68-58d7-44de-8cae-ac79aef284cc\",\n            \"name\": \"File hash indicator for sha1 hash e7dc681a6da4f2f203dccd1068a1ea090f67a057\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"xfe-malware-risk-low\"\n            ],\n            \"created\": \"2022-01-12T12:56:25.659Z\",\n            \"pattern\": \"[ file:hashes.'SHA-1' = 'e7dc681a6da4f2f203dccd1068a1ea090f67a057' ]\",\n            \"modified\": \"2022-01-12T12:56:25.659Z\",\n            \"valid_from\": \"2022-01-12T12:56:25.659Z\",\n            \"description\": \"File hash indicator for sha1 hash e7dc681a6da4f2f203dccd1068a1ea090f67a057\"\n          },\n          {\n            \"id\": \"indicator--a9e5e405-245f-4d70-85e6-1e164109ace0\",\n            \"name\": \"File hash indicator for md5 hash db025370dbe801ac623382edb2336ede\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"xfe-malware-risk-low\"\n            ],\n            \"created\": \"2022-01-12T12:56:25.659Z\",\n            \"pattern\": \"[ file:hashes.MD5 = 'db025370dbe801ac623382edb2336ede' ]\",\n            \"modified\": \"2022-01-12T12:56:25.659Z\",\n            \"valid_from\": \"2022-01-12T12:56:25.659Z\",\n            \"description\": \"File hash indicator for md5 hash db025370dbe801ac623382edb2336ede\"\n          },\n          {\n            \"id\": \"indicator--1f3b85b3-7e7b-4225-8cb7-98b259acf382\",\n            \"name\": \"IP Report for IP address 45.147.230.219\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"benign\",\n              \"xfe-threat-score-1\"\n            ],\n            \"created\": \"2019-09-03T06:51:00.000Z\",\n            \"pattern\": \"[ ipv4-addr:value = '45.147.230.219' ]\",\n            \"modified\": \"2021-12-27T07:52:00.000Z\",\n            \"valid_from\": \"2021-12-27T07:52:00.000Z\",\n            \"description\": \"One of the five RIRs announced a (new) location mapping of the IP.\"\n          },\n          {\n            \"id\": \"indicator--c3f115ce-836d-4c8f-885d-11b8aa546ce5\",\n            \"name\": \"URL Report for qnisq-fedex.com\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10\"\n            ],\n            \"created\": \"2022-01-05T19:04:58.255Z\",\n            \"pattern\": \"[ url:value = 'qnisq-fedex.com' ]\",\n            \"modified\": \"2022-01-05T19:04:58.255Z\",\n            \"valid_from\": \"2022-01-05T19:04:58.255Z\",\n            \"description\": \"Category: Early Warning\\n      Description: This category contains potentially malicious domains identified by analysing DNS traffic.\"\n          },\n          {\n            \"id\": \"indicator--b2e63dca-1700-4954-8d74-85ff4a6e9ce2\",\n            \"name\": \"IP Report for IP address 2606:4700:1101:0000:4221:529a:d8b2:af12\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"benign\",\n              \"xfe-threat-score-1\"\n            ],\n            \"created\": \"2012-03-22T07:26:00.000Z\",\n            \"pattern\": \"[ ipv6-addr:value = '2606:4700:1101:0000:4221:529a:d8b2:af12' ]\",\n            \"modified\": \"2012-03-22T07:26:00.000Z\",\n            \"valid_from\": \"2012-03-22T07:26:00.000Z\",\n            \"description\": \"One of the five RIRs announced a (new) location mapping of the IP.\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[process:name = 'fooproc']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[windows-registry-key:key = 'HKEY_CURRENT_USER\\\\Software\\\\CryptoLocker\\\\Files']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[user-account:value = 'Peter']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[email-message:sender_ref.value = 'jdoe@example.com']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[email-message:from_ref.value = 'mary@example.com’]\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[file:name = 'pdf.exe']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[domain-name:value = 'www.5z8.info']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          }\n\n\n]"
+              },
+              "status": null,
+              "top": "140",
+              "left": "980",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "d8312940-051d-4f94-897c-2491cf6d3bf1",
+              "id": 4400
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "tlp": "Amber",
+                "expiry": 90,
+                "tlp_map": "{'Red': {{'TrafficLightProtocol'| picklist('Red') }}, 'Amber': {{'TrafficLightProtocol'| picklist('Amber') }}, 'Green': {{'TrafficLightProtocol'| picklist('Green') }}, 'White': {{'TrafficLightProtocol'| picklist('White') }}}",
+                "confidence": 50,
+                "reputation": "Suspicious",
+                "reputation_map": "{'Good': {{'IndicatorReputation'| picklist('Good') }}, 'Malicious': {{'IndicatorReputation'| picklist('Malicious') }}, 'High': {{'IndicatorReputation'| picklist('Malicious') }}, 'Suspicious': {{'IndicatorReputation'| picklist('Suspicious') }}, 'TBD': {{'IndicatorReputation'| picklist('TBD') }}, 'No Reputation Available': {{'IndicatorReputation'| picklist('No Reputation Available') }}}",
+                "threat_intel_feeds_tLP_map": "{}",
+                "threat_intel_feeds_reputation_map": "{}",
+                "threat_intel_feeds_typeOfFeed_map": "{}",
+                "threat_intelligence_typeofindicator_map": "{'domain-name-value': {{'ThreatIntelFeedType'| picklist('Domain') }}, 'file-name': {{'ThreatIntelFeedType'| picklist('Filename') }}, 'file-hashes-MD5': {{'ThreatIntelFeedType'| picklist('FileHash-MD5') }}, 'file-hashes-SHA-1': {{'ThreatIntelFeedType'| picklist('FileHash-SHA1') }}, 'file-hashes-SHA-256': {{'ThreatIntelFeedType'| picklist('FileHash-SHA256') }}, 'ipv4-addr-value': {{'ThreatIntelFeedType'| picklist('IPv4 Address') }}, 'ipv6-addr-value': {{'ThreatIntelFeedType'| picklist('IPv6 Address') }}, 'windows-registry-key-key': {{'ThreatIntelFeedType'| picklist('Registry') }}, 'process-name': {{'ThreatIntelFeedType'| picklist('Process') }}, 'url-value': {{'ThreatIntelFeedType'| picklist('URL') }}, 'user-account-value': {{'ThreatIntelFeedType'| picklist('User') }}, 'email-message-from_ref-value': {{'ThreatIntelFeedType'| picklist('Email Address') }}, 'email-message-sender_ref-value': {{'ThreatIntelFeedType'| picklist('Email Address') }} }"
+              },
+              "status": null,
+              "top": "120",
+              "left": "240",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "d7001c7f-e116-46ff-9c48-d68ed3487218",
+              "id": 4401
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Resolve Range",
+              "description": null,
+              "arguments": {
+                "tlp_resolved": "{{vars.tlp | resolveRange(vars.tlp_map)}}",
+                "reputation_resolved": "{{vars.reputation | resolveRange(vars.reputation_map)}}"
+              },
+              "status": null,
+              "top": "220",
+              "left": "400",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "uuid": "c314d3f4-d9a7-4000-a052-a4c491bda00d",
+              "id": 4402
             },
             {
               "@type": "WorkflowStep",
@@ -909,7 +961,7 @@
                   "batch_size": 8000
                 },
                 "resource": {
-                  "tLP": "{% if vars.tlp %}{{ vars.tlp | resolveRange(vars.tlp_map)}}{% endif %}",
+                  "tLP": "{{vars.tlp_resolved}}",
                   "value": "{{vars.item.pattern.split('= ')[-1].strip().replace(\" \",\"\")[1:-2]}}",
                   "source": "Anomali Limo Threat Intel",
                   "created": "{% if vars.item.created %}{{arrow.get(vars.item.created).int_timestamp}}{% endif %}",
@@ -918,7 +970,7 @@
                   "expiresOn": "{% if vars.expiry %}{{ arrow.get(vars.item.valid_from).int_timestamp + (vars.expiry | int)*24*60*60 }}{% else %}None{% endif %}",
                   "validFrom": "{% if vars.item.valid_from %}{{arrow.get(vars.item.valid_from).int_timestamp}}{% endif %}",
                   "confidence": "{% if vars.confidence %}{{ vars.confidence }}{% else %}{{ vars.item.labels[2].split(\"-\")[-1] }}{% endif %}",
-                  "reputation": "{% if vars.reputation %}{{ vars.reputation | resolveRange(vars.reputation_map)}}{% else %}{{ vars.item.labels[1].split(\"-\")[-1] | resolveRange(vars.reputation_map) }}{% endif %}",
+                  "reputation": "{% if vars.reputation %}{{ vars.reputation | resolveRange(vars.reputation_map)}}{% else %}{{ (vars.item.labels[1].split(\"-\")[-1][0]|upper + vars.item.labels[1].split(\"-\")[-1][1:]) | resolveRange(vars.reputation_map) }}{% endif %}",
                   "sourceData": "{{ vars.item | toJSON}}",
                   "typeOfFeed": "{% if 'pattern' in vars.item %}{{ (vars.item.pattern.split(\" =\")[0].strip()[1:].replace(\":\",\"-\").replace(\".\",\"-\").replace(\"'\",\"\").replace(\" \",\"\")) | resolveRange(vars.threat_intelligence_typeofindicator_map)}}{% endif %}",
                   "description": "<p>{{ vars.item.description }}</p>"
@@ -932,119 +984,70 @@
               "top": "480",
               "left": "980",
               "stepType": "/api/3/workflow_step_types/7b221880-716b-4726-a2ca-5e568d330b3e",
-              "uuid": "3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
-              "id": 5799
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Return Sample Data",
-              "description": null,
-              "arguments": {
-                "data": "[\n        {\n            \"id\": \"indicator--5fc62c9b-4acd-47b5-8642-8477acf71a59\",\n            \"name\": \"File hash indicator for sha256 hash 057a48fe378586b6913d29b4b10162b4b5045277f1be66b7a01fb7e30bd05ef3\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"xfe-malware-risk-low\"\n            ],\n            \"created\": \"2022-01-12T12:56:25.658Z\",\n            \"pattern\": \"[ file:hashes.'SHA-256' = '057a48fe378586b6913d29b4b10162b4b5045277f1be66b7a01fb7e30bd05ef3' ]\",\n            \"modified\": \"2022-01-12T12:56:25.658Z\",\n            \"valid_from\": \"2022-01-12T12:56:25.658Z\",\n            \"description\": \"File hash indicator for sha256 hash 057a48fe378586b6913d29b4b10162b4b5045277f1be66b7a01fb7e30bd05ef3\"\n          },\n          {\n            \"id\": \"indicator--f782bb68-58d7-44de-8cae-ac79aef284cc\",\n            \"name\": \"File hash indicator for sha1 hash e7dc681a6da4f2f203dccd1068a1ea090f67a057\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"xfe-malware-risk-low\"\n            ],\n            \"created\": \"2022-01-12T12:56:25.659Z\",\n            \"pattern\": \"[ file:hashes.'SHA-1' = 'e7dc681a6da4f2f203dccd1068a1ea090f67a057' ]\",\n            \"modified\": \"2022-01-12T12:56:25.659Z\",\n            \"valid_from\": \"2022-01-12T12:56:25.659Z\",\n            \"description\": \"File hash indicator for sha1 hash e7dc681a6da4f2f203dccd1068a1ea090f67a057\"\n          },\n          {\n            \"id\": \"indicator--a9e5e405-245f-4d70-85e6-1e164109ace0\",\n            \"name\": \"File hash indicator for md5 hash db025370dbe801ac623382edb2336ede\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"xfe-malware-risk-low\"\n            ],\n            \"created\": \"2022-01-12T12:56:25.659Z\",\n            \"pattern\": \"[ file:hashes.MD5 = 'db025370dbe801ac623382edb2336ede' ]\",\n            \"modified\": \"2022-01-12T12:56:25.659Z\",\n            \"valid_from\": \"2022-01-12T12:56:25.659Z\",\n            \"description\": \"File hash indicator for md5 hash db025370dbe801ac623382edb2336ede\"\n          },\n          {\n            \"id\": \"indicator--1f3b85b3-7e7b-4225-8cb7-98b259acf382\",\n            \"name\": \"IP Report for IP address 45.147.230.219\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"benign\",\n              \"xfe-threat-score-1\"\n            ],\n            \"created\": \"2019-09-03T06:51:00.000Z\",\n            \"pattern\": \"[ ipv4-addr:value = '45.147.230.219' ]\",\n            \"modified\": \"2021-12-27T07:52:00.000Z\",\n            \"valid_from\": \"2021-12-27T07:52:00.000Z\",\n            \"description\": \"One of the five RIRs announced a (new) location mapping of the IP.\"\n          },\n          {\n            \"id\": \"indicator--c3f115ce-836d-4c8f-885d-11b8aa546ce5\",\n            \"name\": \"URL Report for qnisq-fedex.com\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10\"\n            ],\n            \"created\": \"2022-01-05T19:04:58.255Z\",\n            \"pattern\": \"[ url:value = 'qnisq-fedex.com' ]\",\n            \"modified\": \"2022-01-05T19:04:58.255Z\",\n            \"valid_from\": \"2022-01-05T19:04:58.255Z\",\n            \"description\": \"Category: Early Warning\\n      Description: This category contains potentially malicious domains identified by analysing DNS traffic.\"\n          },\n          {\n            \"id\": \"indicator--b2e63dca-1700-4954-8d74-85ff4a6e9ce2\",\n            \"name\": \"IP Report for IP address 2606:4700:1101:0000:4221:529a:d8b2:af12\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"benign\",\n              \"xfe-threat-score-1\"\n            ],\n            \"created\": \"2012-03-22T07:26:00.000Z\",\n            \"pattern\": \"[ ipv6-addr:value = '2606:4700:1101:0000:4221:529a:d8b2:af12' ]\",\n            \"modified\": \"2012-03-22T07:26:00.000Z\",\n            \"valid_from\": \"2012-03-22T07:26:00.000Z\",\n            \"description\": \"One of the five RIRs announced a (new) location mapping of the IP.\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[process:name = 'fooproc']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[windows-registry-key:key = 'HKEY_CURRENT_USER\\\\Software\\\\CryptoLocker\\\\Files']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[user-account:value = 'Peter']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[email-message:sender_ref.value = 'jdoe@example.com']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[email-message:from_ref.value = 'mary@example.com’]\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[file:name = 'pdf.exe']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          },\n          {\n            \"id\": \"indicator--f99cc4c0-14b2-4ed2-977c-e87448c24d6a\",\n            \"name\": \"Known malicious domain\",\n            \"type\": \"indicator\",\n            \"labels\": [\n              \"malicious-activity\",\n              \"xfe-threat-score-10.0\"\n            ],\n            \"created\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern\": \"[domain-name:value = 'www.5z8.info']\",\n            \"modified\": \"2022-01-11T15:32:51.3108Z\",\n            \"valid_from\": \"2022-01-11T15:32:51.3108Z\",\n            \"pattern_type\": \"stix\",\n            \"spec_version\": \"2.1\",\n            \"firstactivity\": \"\",\n            \"dateofdetection\": \"2022-01-11T14:15:59.509Z\",\n            \"pattern_version\": \"2.1\",\n            \"registrationdate\": \"2022-01-09T16:48:39Z\"\n          }\n\n\n]"
-              },
-              "status": null,
-              "top": "140",
-              "left": "980",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "28271ed7-7878-46d2-9129-89cc65a69d2c",
-              "id": 5800
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Configuration",
-              "description": null,
-              "arguments": {
-                "tlp": "Amber",
-                "expiry": "None",
-                "tlp_map": "{'Red': {{'TrafficLightProtocol'| picklist('Red') }}, 'Amber': {{'TrafficLightProtocol'| picklist('Amber') }}, 'Green': {{'TrafficLightProtocol'| picklist('Green') }}, 'White': {{'TrafficLightProtocol'| picklist('White') }}}",
-                "confidence": "50",
-                "reputation": "Suspicious",
-                "reputation_map": "{'Good': {{'IndicatorReputation'| picklist('Good') }}, 'Malicious': {{'IndicatorReputation'| picklist('Malicious') }}, 'Suspicious': {{'IndicatorReputation'| picklist('Suspicious') }}, 'TBD': {{'IndicatorReputation'| picklist('TBD') }}, 'No Reputation Available': {{'IndicatorReputation'| picklist('No Reputation Available') }}}",
-                "threat_intelligence_typeofindicator_map": "{'domain-name-value': {{'ThreatIntelFeedType'| picklist('Domain') }}, 'file-name': {{'ThreatIntelFeedType'| picklist('Filename') }}, 'file-hashes-MD5': {{'ThreatIntelFeedType'| picklist('FileHash-MD5') }}, 'file-hashes-SHA-1': {{'ThreatIntelFeedType'| picklist('FileHash-SHA1') }}, 'file-hashes-SHA-256': {{'ThreatIntelFeedType'| picklist('FileHash-SHA256') }}, 'ipv4-addr-value': {{'ThreatIntelFeedType'| picklist('IPv4 Address') }}, 'ipv6-addr-value': {{'ThreatIntelFeedType'| picklist('IPv6 Address') }}, 'windows-registry-key-key': {{'ThreatIntelFeedType'| picklist('Registry') }}, 'process-name': {{'ThreatIntelFeedType'| picklist('Process') }}, 'url-value': {{'ThreatIntelFeedType'| picklist('URL') }}, 'user-account-value': {{'ThreatIntelFeedType'| picklist('User') }}, 'email-message-from_ref-value': {{'ThreatIntelFeedType'| picklist('Email Address') }}, 'email-message-sender_ref-value': {{'ThreatIntelFeedType'| picklist('Email Address') }} }"
-              },
-              "status": null,
-              "top": "120",
-              "left": "240",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "d99a5933-befd-4f31-94b3-d3885994e894",
-              "id": 5801
-            },
-            {
-              "@type": "WorkflowStep",
-              "name": "Resolve Range",
-              "description": null,
-              "arguments": {
-                "tlp_resolved": "{{vars.tlp | resolveRange(vars.tlp_map)}}",
-                "reputation_resolved": "{{vars.reputation | resolveRange(vars.reputation_map)}}"
-              },
-              "status": null,
-              "top": "220",
-              "left": "400",
-              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-              "uuid": "33f213d9-ff62-4c38-b8b5-c01dd356634f",
-              "id": 5802
+              "uuid": "6eb1af7e-460a-4f50-9243-438764ee65e5",
+              "id": 4403
             }
           ],
           "routes": [
             {
               "@type": "WorkflowRoute",
               "name": "Is data only for mapping -> Return Sample Data",
-              "targetStep": "/api/3/workflow_steps/28271ed7-7878-46d2-9129-89cc65a69d2c",
-              "sourceStep": "/api/3/workflow_steps/94eb6a52-72ac-468b-839d-6738923263fa",
+              "targetStep": "/api/3/workflow_steps/d8312940-051d-4f94-897c-2491cf6d3bf1",
+              "sourceStep": "/api/3/workflow_steps/db0cc261-9d5d-4036-9765-9dfb35413457",
               "label": "Yes, For Mapping",
               "isExecuted": false,
-              "uuid": "4db1b2df-2c44-43cb-b325-4aeed4e6f74f"
+              "uuid": "77850cde-6c14-4a0d-a0ac-ce832a37901b"
             },
             {
               "@type": "WorkflowRoute",
               "name": "Is data only for mapping -> Create Record",
-              "targetStep": "/api/3/workflow_steps/3b324eae-32ea-44e3-be2d-64d2ad9fbee6",
-              "sourceStep": "/api/3/workflow_steps/94eb6a52-72ac-468b-839d-6738923263fa",
+              "targetStep": "/api/3/workflow_steps/6eb1af7e-460a-4f50-9243-438764ee65e5",
+              "sourceStep": "/api/3/workflow_steps/db0cc261-9d5d-4036-9765-9dfb35413457",
               "label": "No, For Ingestion",
               "isExecuted": false,
-              "uuid": "5abff9d1-8a23-4120-9e40-e9be5fe7ec31"
+              "uuid": "7a251425-15f5-44b5-9406-a59a6947519a"
             },
             {
               "@type": "WorkflowRoute",
               "name": "Start -> Configuration",
-              "targetStep": "/api/3/workflow_steps/d99a5933-befd-4f31-94b3-d3885994e894",
-              "sourceStep": "/api/3/workflow_steps/786477fc-5ca6-4092-bea1-f1d1db6720ae",
+              "targetStep": "/api/3/workflow_steps/d7001c7f-e116-46ff-9c48-d68ed3487218",
+              "sourceStep": "/api/3/workflow_steps/784dcd12-d5b4-4413-ac15-5d973900b598",
               "label": null,
               "isExecuted": false,
-              "uuid": "5ac14c1d-9297-4823-a24f-0bafbc5e1ed2"
+              "uuid": "831c5341-af75-460c-b66c-5176c480ad18"
             },
             {
               "@type": "WorkflowRoute",
               "name": "Configuration -> Resolve Range",
-              "targetStep": "/api/3/workflow_steps/33f213d9-ff62-4c38-b8b5-c01dd356634f",
-              "sourceStep": "/api/3/workflow_steps/d99a5933-befd-4f31-94b3-d3885994e894",
+              "targetStep": "/api/3/workflow_steps/c314d3f4-d9a7-4000-a052-a4c491bda00d",
+              "sourceStep": "/api/3/workflow_steps/d7001c7f-e116-46ff-9c48-d68ed3487218",
               "label": null,
               "isExecuted": false,
-              "uuid": "8eecc4b9-68cb-4538-b1e4-47d8468892c3"
+              "uuid": "e5de121c-8178-4044-8239-579934bed8c7"
             },
             {
               "@type": "WorkflowRoute",
               "name": "Resolve Range -> Is data only for mapping",
-              "targetStep": "/api/3/workflow_steps/94eb6a52-72ac-468b-839d-6738923263fa",
-              "sourceStep": "/api/3/workflow_steps/33f213d9-ff62-4c38-b8b5-c01dd356634f",
+              "targetStep": "/api/3/workflow_steps/db0cc261-9d5d-4036-9765-9dfb35413457",
+              "sourceStep": "/api/3/workflow_steps/c314d3f4-d9a7-4000-a052-a4c491bda00d",
               "label": null,
               "isExecuted": false,
-              "uuid": "ef5f44bf-6865-45e0-bc84-7141a634b8f2"
+              "uuid": "2f2d76c9-715a-4936-aadf-6b4a741bbbc6"
             }
           ],
           "priority": "/api/3/picklists/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
-          "uuid": "cc47ea13-5f9b-409e-9a50-3c80bd008140",
+          "uuid": "d481fc15-d072-4cbc-9772-efc52510396b",
           "recordTags": [
             "dataingestion",
             "create",
             "fetch",
             "anomali-limo-threat-intel-feed"
           ],
-          "id": 1361,
-          "createUser": "/api/3/appliances/57545210-2adc-472b-a24f-2df6ee8dfe63",
-          "createDate": 1642489319.809171,
+          "id": 1122,
+          "createUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
+          "createDate": 1642587891.902563,
           "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-          "modifyDate": 1642500832.615011,
+          "modifyDate": 1642588256.450385,
           "owners": [],
           "isPrivate": false,
           "deletedAt": null
@@ -1053,9 +1056,9 @@
     }
   ],
   "exported_tags": [
+    "anomali-limo-threat-intel-feed",
     "dataingestion",
     "ingest",
-    "anomali-limo-threat-intel-feed",
     "create",
     "fetch"
   ]
