@@ -5,15 +5,23 @@
   "publisher": "Fortinet",
   "cs_approved": true,
   "cs_compatible": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "category": "Threat Intelligence",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
+  "tags": [
+    "threatintel-inbound"
+  ],
   "ingestion_supported": true,
   "ingestion_modes": [
     "scheduled"
   ],
-  "help_online": "https://docs.fortinet.com/document/fortisoar/1.0.0/anomali-limo-threat-intel-feed/212/anomali-limo-threat-intel-feed-v1-0-0",
+  "ingestion_preferences": {
+    "modules": [
+      "threat_intel_feeds"
+    ]
+  },
+  "help_online": "",
   "configuration": {
     "fields": [
       {
@@ -27,7 +35,7 @@
         "description": "The URL of the Anomali Limo Threat Intel Feed server to which you will connect and perform the automated operations."
       },
       {
-        "title": "User Name",
+        "title": "Username",
         "required": true,
         "editable": true,
         "visible": true,
@@ -144,13 +152,25 @@
           "editable": true,
           "type": "select",
           "options": [
+            "Create as Feed Records in FortiSOAR",
             "Save to File",
             "Return as a JSON"
           ],
           "value": "Save to File",
-          "tooltip": "Select the method of returning the Feed Data information. You can choose between the data being returned in the JSON format (Return as a JSON) or being written to a file on the FortiSOAR server (Save to File). \nIf you choose the 'Save to File' option, then in the Filename field, specify the name of the file in which you want to save the feed information retrieved from Anomali Limo.",
-          "description": "Select the method of returning the Feed Data information. You can choose between the data being returned in the JSON format (Return as a JSON) or being written to a file on the FortiSOAR server (Save to File). \nIf you choose the 'Save to File' option, then in the Filename field, specify the name of the file in which you want to save the feed information retrieved from Anomali Limo.",
+          "tooltip": "Select the method of returning the Feed Data information. You can choose between the data being create as Feed records in FortiSOAR or returned in the JSON format (Return as a JSON) or being written to a file on the FortiSOAR server (Save to File). If you choose the 'Create as Feed Records in FortiSOAR' option, then in Record Creation Playbook IRI field, specify the IRI of the Create Record playbooks IRI, else if if you choose 'Save to File' option, then in the Filename field, specify the name of the file in which you want to save the feed information retrieved from Anomali Limo.",
+          "description": "Select the method of returning the Feed Data information. You can choose between the data being create as Feed records in FortiSOAR or returned in the JSON format (Return as a JSON) or being written to a file on the FortiSOAR server (Save to File). If you choose the 'Create as Feed Records in FortiSOAR' option, then in Record Creation Playbook IRI field, specify the IRI of the Create Record playbooks IRI, else if if you choose 'Save to File' option, then in the Filename field, specify the name of the file in which you want to save the feed information retrieved from Anomali Limo.",
           "onchange": {
+            "Create as Feed Records in FortiSOAR": [
+              {
+                "title": "Record Creation Playbook IRI",
+                "description": "",
+                "type": "text",
+                "name": "create_pb_id",
+                "required": false,
+                "editable": true,
+                "visible": true
+              }
+            ],
             "Return as a JSON": [],
             "Save to File": [
               {
