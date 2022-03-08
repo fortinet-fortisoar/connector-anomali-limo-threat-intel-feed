@@ -10,7 +10,7 @@
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
   "tags": [
-    "threatintel-inbound"
+    "ThreatIntel"
   ],
   "ingestion_supported": true,
   "ingestion_modes": [
