@@ -968,7 +968,7 @@
                   "__replace": "true",
                   "expiresOn": "{% if vars.expiry %}{{ arrow.get(vars.item.valid_from).int_timestamp + (vars.expiry | int)*24*60*60 }}{% else %}None{% endif %}",
                   "validFrom": "{% if vars.item.valid_from %}{{arrow.get(vars.item.valid_from).int_timestamp}}{% endif %}",
-                  "confidence": "{% if vars.confidence %}{{ vars.confidence }}{% else %}{{ vars.item.labels[2].split(\"-\")[-1] }}{% endif %}",
+                  "confidence": "{% if vars.item.labels | length >= 2 %}{{ vars.item.labels[2].split(\"-\")[-1] }}{% elif vars.confidence %}{{ vars.confidence }}{% else %}None{% endif %}",
                   "reputation": "{% if vars.reputation %}{{ vars.reputation | resolveRange(vars.reputation_map)}}{% else %}{{ (vars.item.labels[1].split(\"-\")[-1][0]|upper + vars.item.labels[1].split(\"-\")[-1][1:]) | resolveRange(vars.reputation_map) }}{% endif %}",
                   "sourceData": "{{ vars.item | toJSON}}",
                   "typeOfFeed": "{% if 'pattern' in vars.item %}{{ (vars.item.pattern.split(\" =\")[0].strip()[1:].replace(\":\",\"-\").replace(\".\",\"-\").replace(\"'\",\"\").replace(\" \",\"\")) | resolveRange(vars.threat_intel_feeds_typeOfFeed_map)}}{% endif %}",
