@@ -915,7 +915,7 @@
               "name": "Configuration",
               "description": null,
               "arguments": {
-                "tlp": "Amber",
+                "tlp": "White",
                 "expiry": 90,
                 "tlp_map": "{'Red': {{'TrafficLightProtocol'| picklist('Red') }}, 'Amber': {{'TrafficLightProtocol'| picklist('Amber') }}, 'Green': {{'TrafficLightProtocol'| picklist('Green') }}, 'White': {{'TrafficLightProtocol'| picklist('White') }}}",
                 "confidence": 50,
