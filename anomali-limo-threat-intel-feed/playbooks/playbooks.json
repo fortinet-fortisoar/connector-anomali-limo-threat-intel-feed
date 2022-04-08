@@ -920,7 +920,7 @@
                 "tlp_map": "{'Red': {{'TrafficLightProtocol'| picklist('Red') }}, 'Amber': {{'TrafficLightProtocol'| picklist('Amber') }}, 'Green': {{'TrafficLightProtocol'| picklist('Green') }}, 'White': {{'TrafficLightProtocol'| picklist('White') }}}",
                 "confidence": 50,
                 "reputation": "Suspicious",
-                "reputation_map": "{'Good': {{'IndicatorReputation'| picklist('Good') }}, 'Malicious': {{'IndicatorReputation'| picklist('Malicious') }}, 'High': {{'IndicatorReputation'| picklist('Malicious') }}, 'Suspicious': {{'IndicatorReputation'| picklist('Suspicious') }}, 'TBD': {{'IndicatorReputation'| picklist('TBD') }}, 'No Reputation Available': {{'IndicatorReputation'| picklist('No Reputation Available') }}}",
+                "reputation_map": "{'Good': \"{{'IndicatorReputation' | picklist('Good', 'uuid')}}\",'Suspicious': \"{{'IndicatorReputation' | picklist('Suspicious', 'uuid')}}\",'Malicious': \"{{'IndicatorReputation' | picklist('Malicious', 'uuid')}}\",'No Reputation Available': \"{{'IndicatorReputation' | picklist('No Reputation Available', 'uuid')}}\",'TBD': \"{{'IndicatorReputation' | picklist('TBD', 'uuid')}}\", 'low': \"{{'IndicatorReputation' | picklist('Suspicious', 'uuid')}}\", 'medium': \"{{'IndicatorReputation' | picklist('Suspicious', 'uuid')}}\", 'high': \"{{'IndicatorReputation' | picklist('Malicious', 'uuid')}}\", 'very-high': \"{{'IndicatorReputation' | picklist('Malicious', 'uuid')}}\"}",
                 "threat_intel_feeds_tLP_map": "{}",
                 "threat_intel_feeds_reputation_map": "{}",
                 "threat_intel_feeds_typeOfFeed_map": "{'domain-name-value': {{'ThreatIntelFeedType'| picklist('Domain') }}, 'file-name': {{'ThreatIntelFeedType'| picklist('Filename') }}, 'file-hashes-MD5': {{'ThreatIntelFeedType'| picklist('FileHash-MD5') }}, 'file-hashes-SHA-1': {{'ThreatIntelFeedType'| picklist('FileHash-SHA1') }}, 'file-hashes-SHA-256': {{'ThreatIntelFeedType'| picklist('FileHash-SHA256') }}, 'ipv4-addr-value': {{'ThreatIntelFeedType'| picklist('IPv4 Address') }}, 'ipv6-addr-value': {{'ThreatIntelFeedType'| picklist('IPv6 Address') }}, 'windows-registry-key-key': {{'ThreatIntelFeedType'| picklist('Registry') }}, 'process-name': {{'ThreatIntelFeedType'| picklist('Process') }}, 'url-value': {{'ThreatIntelFeedType'| picklist('URL') }}, 'user-account-value': {{'ThreatIntelFeedType'| picklist('User') }}, 'email-message-from_ref-value': {{'ThreatIntelFeedType'| picklist('Email Address') }}, 'email-message-sender_ref-value': {{'ThreatIntelFeedType'| picklist('Email Address') }} }"
@@ -961,15 +961,18 @@
                 },
                 "resource": {
                   "tLP": "{{vars.tlp_resolved}}",
+                  "label": "{{vars.item.labels | toJSON}}",
                   "value": "{{vars.item.pattern.split('= ')[-1].strip().replace(\" \",\"\")[1:-2]}}",
                   "source": "Anomali Limo Threat Intel",
                   "created": "{% if vars.item.created %}{{arrow.get(vars.item.created).int_timestamp}}{% endif %}",
                   "modified": "{% if vars.item.modified %}{{arrow.get(vars.item.modified).int_timestamp}}{% else %}None{% endif %}",
+                  "sourceId": "{{ vars.item.id | replace('indicator--', '') }}",
                   "__replace": "true",
                   "expiresOn": "{% if vars.expiry %}{{ arrow.get(vars.item.valid_from).int_timestamp + (vars.expiry | int)*24*60*60 }}{% else %}None{% endif %}",
                   "validFrom": "{% if vars.item.valid_from %}{{arrow.get(vars.item.valid_from).int_timestamp}}{% endif %}",
                   "confidence": "{% if vars.item.labels | length >= 2 %}{{ vars.item.labels[2].split(\"-\")[-1] }}{% elif vars.confidence %}{{ vars.confidence }}{% else %}None{% endif %}",
-                  "reputation": "{% if vars.reputation %}{{ vars.reputation | resolveRange(vars.reputation_map)}}{% else %}{{ (vars.item.labels[1].split(\"-\")[-1][0]|upper + vars.item.labels[1].split(\"-\")[-1][1:]) | resolveRange(vars.reputation_map) }}{% endif %}",
+                  "recordTags": "[\"{{ vars.item.labels[0] }}\"]",
+                  "reputation": "{% if vars.item.labels[1] %}{{(vars.item.labels[1] | replace('threatstream-severity-', '')) | resolveRange(vars.reputation_map)}}{% else %}{{vars.reputation_resolved}}{% endif %}",
                   "sourceData": "{{ vars.item | toJSON}}",
                   "typeOfFeed": "{% if 'pattern' in vars.item %}{{ (vars.item.pattern.split(\" =\")[0].strip()[1:].replace(\":\",\"-\").replace(\".\",\"-\").replace(\"'\",\"\").replace(\" \",\"\")) | resolveRange(vars.threat_intel_feeds_typeOfFeed_map)}}{% endif %}",
                   "description": "<p>{{ vars.item.description }}</p>"
