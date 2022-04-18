@@ -9,7 +9,7 @@
   "category": "SIEM",
   "icon_small_name": "small_icon.png",
   "icon_large_name": "large_icon.png",
-  "help_online": "",
+  "help_online": "https://docs.fortinet.com/document/fortisoar/2.0.0/anomali-limo-threat-intel-feed/227/anomali-limo-threat-intel-feed-v2-0-0",
   "configuration": {
     "fields": [
       {
