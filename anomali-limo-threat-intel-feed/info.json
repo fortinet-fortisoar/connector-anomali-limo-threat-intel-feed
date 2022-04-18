@@ -18,10 +18,11 @@
   ],
   "ingestion_preferences": {
     "modules": [
-      "threat_intel_feeds", "indicators"
+      "threat_intel_feeds",
+      "indicators"
     ]
   },
-  "help_online": "",
+  "help_online": "https://docs.fortinet.com/document/fortisoar/2.0.0/anomali-limo-threat-intel-feed/227/anomali-limo-threat-intel-feed-v2-0-0",
   "configuration": {
     "fields": [
       {
@@ -80,8 +81,7 @@
           ""
         ]
       },
-      "parameters": [
-      ],
+      "parameters": [],
       "enabled": true
     },
     {
@@ -235,12 +235,10 @@
             "created": "",
             "description": "",
             "id": "",
-            "labels": [
-            ],
+            "labels": [],
             "modified": "",
             "name": "",
-            "object_marking_refs": [
-            ],
+            "object_marking_refs": [],
             "pattern": "",
             "type": "",
             "valid_from": ""
@@ -293,10 +291,8 @@
           {
             "date_added": "",
             "id": "",
-            "media_types": [
-            ],
-            "versions": [
-            ]
+            "media_types": [],
+            "versions": []
           }
         ]
       },
